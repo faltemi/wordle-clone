@@ -52,6 +52,9 @@ int main(){
         }
     }
 
+    LetterCell *keyboard[3] = { 0 };
+    initKeyboard(&keyboard);
+
     // Desired framerate
     SetTargetFPS(60);
     // ----------------------------------------------------------------

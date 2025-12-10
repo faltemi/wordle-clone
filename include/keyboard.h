@@ -1,0 +1,64 @@
+#ifndef KEYBOARD_H
+#define KEYBOARD_H
+
+#include "cell.h"
+#include <stdlib.h>
+
+#define TOP_ROW_KEYS 10
+#define MID_ROW_KEYS 9
+#define BOTTOM_ROW_KEYS 9
+
+typedef enum KeyboardRow {
+    TOP,
+    MIDDLE,
+    BOTTOM,
+    NUM_ROWS
+} KeyboardRow;
+
+typedef struct Keyboard {
+    Vector2 position; // top left
+    LetterCell *keys[NUM_ROWS];
+
+} Keyboard;
+
+Keyboard *createKeyboard(Vector2 position);
+void releaseKeyboard(Keyboard *k);
+
+static const char *top_row_keys[TOP_ROW_KEYS] = {
+    [0] = "Q",
+    [1] = "W",
+    [2] = "E",
+    [3] = "R",
+    [4] = "T",
+    [5] = "Y",
+    [6] = "U",
+    [7] = "I",
+    [8] = "O",
+    [9] = "P"
+};
+
+static const char *mid_row_keys[MID_ROW_KEYS] = {
+    [0] = "A",
+    [1] = "S",
+    [2] = "D",
+    [3] = "F",
+    [4] = "G",
+    [5] = "H",
+    [6] = "J",
+    [7] = "K",
+    [8] = "L"
+};
+
+static const char *bottom_row_keys[BOTTOM_ROW_KEYS] = {
+    [0] = "#",
+    [1] = "Z",
+    [2] = "X",
+    [3] = "C",
+    [4] = "V",
+    [5] = "B",
+    [6] = "N",
+    [7] = "M",
+    [8] = "<"
+};
+
+#endif // KEYBOARD_H
