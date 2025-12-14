@@ -4,7 +4,7 @@
 #include "cell.h"
 #include <stdlib.h>
 
-#define TOP_ROW_KEYS 10
+#define NUM_ROW_KEYS 10
 #define MID_ROW_KEYS 9
 #define BOTTOM_ROW_KEYS 9
 
@@ -24,7 +24,7 @@ typedef struct Keyboard {
 Keyboard *createKeyboard(Vector2 position);
 void releaseKeyboard(Keyboard *k);
 
-static const char *top_row_keys[TOP_ROW_KEYS] = {
+static const char *top_row_keys[NUM_ROW_KEYS+1] = {
     [0] = "Q",
     [1] = "W",
     [2] = "E",
@@ -37,7 +37,7 @@ static const char *top_row_keys[TOP_ROW_KEYS] = {
     [9] = "P"
 };
 
-static const char *mid_row_keys[MID_ROW_KEYS] = {
+static const char *mid_row_keys[NUM_ROW_KEYS] = {
     [0] = "A",
     [1] = "S",
     [2] = "D",
@@ -49,7 +49,7 @@ static const char *mid_row_keys[MID_ROW_KEYS] = {
     [8] = "L"
 };
 
-static const char *bottom_row_keys[BOTTOM_ROW_KEYS] = {
+static const char *bottom_row_keys[NUM_ROW_KEYS] = {
     [0] = "#",
     [1] = "Z",
     [2] = "X",
