@@ -15,8 +15,6 @@ typedef enum CellState {
 } CellState;
 
 typedef struct LetterCell {
-    Vector2 position;
-    Vector2 size;
     Rectangle bounds;
     char *letter;
     int fontSize;
@@ -25,5 +23,5 @@ typedef struct LetterCell {
 
 
 void DrawLetterCell(LetterCell *cell);
-void InitLetterCell(LetterCell *cell, int sizeX, int sizeY, int posX, int posY, int fontSize);
+void InitLetterCell(LetterCell *cell, Vector2 position, Vector2 size, int fontSize);
 #endif // CELL_H

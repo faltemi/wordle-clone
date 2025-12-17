@@ -12,18 +12,18 @@
 typedef enum GameScreen { LOGO, TITLE, GAMEPLAY, ENDING } GameScreen;
 
 // Position calculation for letter cells
-static inline void InitLetterCellAt(LetterCell *cell, int row, int col) {
+static inline void InitLetterCellAt(LetterCell *cell, Vector2 position) {
     // Center with respect to padding (which isnt ba)
-    const int paddingX = col == 0 ? 0 : CELL_PADDING;
-    const int paddingY = row == 0 ? 0 : CELL_PADDING;
+    const int paddingX = position.x == 0 ? 0 : CELL_PADDING;
+    const int paddingY = position.y == 0 ? 0 : CELL_PADDING;
 
     const int totalW = NUM_LETTERS*CELL_SIZE + CELL_PADDING*(NUM_LETTERS-1);
     const int offsetX = (GetScreenWidth() - totalW)/2;
 
-    const int posX = col*(CELL_SIZE + paddingX) + offsetX;
-    const int posY = row*(CELL_SIZE + paddingY) + CELL_Y_OFFSET;
+    const int posX = position.x*(CELL_SIZE + paddingX) + offsetX;
+    const int posY = position.y*(CELL_SIZE + paddingY) + CELL_Y_OFFSET;
 
-    InitLetterCell(cell, CELL_SIZE, CELL_SIZE, posX, posY, LETTER_SIZE);
+    InitLetterCell(cell, (Vector2){posX, posY}, (Vector2){CELL_SIZE, CELL_SIZE}, LETTER_SIZE);
 }
 
 int main(){
@@ -48,12 +48,13 @@ int main(){
     // Initialize letter cells
     for (int r = 0; r < NUM_GUESSES; r++){
         for (int c = 0; c < NUM_LETTERS; c++){
-            InitLetterCellAt(&cells[r][c], r, c);
+            Vector2 position = { .x = c, .y = r };
+            InitLetterCellAt(&cells[r][c], position);
         }
     }
 
-    LetterCell *keyboard[3] = { 0 };
-    initKeyboard(&keyboard);
+    // LetterCell *keyboard[3] = { 0 };
+    // initKeyboard(&keyboard);
 
     // Desired framerate
     SetTargetFPS(60);

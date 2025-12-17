@@ -3,10 +3,10 @@
 
 #include "cell.h"
 #include <stdlib.h>
+#include <string.h>
 
-#define NUM_ROW_KEYS 10
-#define MID_ROW_KEYS 9
-#define BOTTOM_ROW_KEYS 9
+#define NUM_ROW_KEYS 9
+#define TOP_ROW_MOD 1
 
 typedef enum KeyboardRow {
     TOP,
@@ -17,11 +17,15 @@ typedef enum KeyboardRow {
 
 typedef struct Keyboard {
     Vector2 position; // top left
-    LetterCell *keys[NUM_ROWS];
+    Vector2 keySize;
+    int keyPadding;
+    Color primaryC;
+    Color secondaryC;
+    LetterCell **keys[NUM_ROWS];
 
 } Keyboard;
 
-Keyboard *createKeyboard(Vector2 position);
+Keyboard *createKeyboard(Vector2 position, Vector2 keySize, int keyPadding, Color primary, Color secondary);
 void releaseKeyboard(Keyboard *k);
 
 static const char *top_row_keys[NUM_ROW_KEYS+1] = {
