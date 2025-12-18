@@ -26,6 +26,7 @@ typedef struct Keyboard {
 } Keyboard;
 
 Keyboard *createKeyboard(Vector2 position, Vector2 keySize, int keyPadding, Color primary, Color secondary);
+void drawKeyboard(Keyboard *k);
 void releaseKeyboard(Keyboard *k);
 
 static const char *top_row_keys[NUM_ROW_KEYS+1] = {

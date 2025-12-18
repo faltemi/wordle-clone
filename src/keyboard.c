@@ -18,16 +18,30 @@ static const char **getKeyMapArr(KeyboardRow row){
     }
 }
 
+static void drawRow(Keyboard *k, KeyboardRow row){
+    int num_keys = NUM_ROW_KEYS + (row == TOP ? TOP_ROW_MOD : 0);
+    
+    for(int i = 0; i < num_keys; ++i){
+        DrawLetterCell(k->keys[row][i]);
+    }
+}
+
+void drawKeyboard(Keyboard *k){
+    drawRow(k, TOP);
+    drawRow(k, MIDDLE);
+    drawRow(k, BOTTOM);
+}
+
 void fillRow(Keyboard *k, KeyboardRow row){
     int num_keys = NUM_ROW_KEYS + (row == TOP ? TOP_ROW_MOD : 0);
     LetterCell **curRow = malloc(num_keys * sizeof(LetterCell*));
     
     const char **row_key_map = getKeyMapArr(row);
-
+    const int offsetX = (GetScreenWidth() - (num_keys*30))/2;
     for(int i = 0; i < num_keys; ++i){
         LetterCell *newCell = malloc(sizeof(LetterCell));
-        Vector2 cellSize = {10, 10}; // ToDo: Clean this
-        Vector2 cellPos = {0, 0};
+        Vector2 cellSize = {30, 30}; // ToDo: Clean this
+        Vector2 cellPos = {i*30 + offsetX, (int)row + 30};
         InitLetterCell(newCell, cellPos, cellSize, 4);
         newCell->letter = strdup(row_key_map[i]); // This might be POSIX only
 

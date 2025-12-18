@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include "cell.h"
+#include "keyboard.h"
 
 #define NUM_GUESSES         6
 #define NUM_LETTERS         5
@@ -53,8 +54,8 @@ int main(){
         }
     }
 
-    // LetterCell *keyboard[3] = { 0 };
-    // initKeyboard(&keyboard);
+    // ToDo: Actually use cell params to make keyb
+    Keyboard *keyb = createKeyboard((Vector2) {0,0}, (Vector2) {30, 30}, 3, LIGHTGRAY, YELLOW);
 
     // Desired framerate
     SetTargetFPS(60);
@@ -124,6 +125,9 @@ int main(){
                             DrawLetterCell(&cells[r][c]);
                         }
                     }
+
+                    // Draw keyboard
+                    drawKeyboard(keyb);
                 } break;
                 case ENDING:
                 {
@@ -141,6 +145,7 @@ int main(){
     // ----------------------------------------------------------------
 
     CloseWindow();
+    releaseKeyboard(keyb);
     // ----------------------------------------------------------------
     return 0;
 }
