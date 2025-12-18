@@ -20,7 +20,7 @@ static const char **getKeyMapArr(KeyboardRow row){
 
 void fillRow(Keyboard *k, KeyboardRow row){
     int num_keys = NUM_ROW_KEYS + (row == TOP ? TOP_ROW_MOD : 0);
-    LetterCell *curRow[num_keys];
+    LetterCell **curRow = malloc(num_keys * sizeof(LetterCell*));
     
     const char **row_key_map = getKeyMapArr(row);
 
@@ -50,11 +50,15 @@ Keyboard *createKeyboard(Vector2 postion, Vector2 keySize, int keyPadding, Color
 }
 
 static void freeRow(Keyboard *k, KeyboardRow row){
+    if(k->keys[row] == NULL) return;
+
     int num_keys = NUM_ROW_KEYS + (row == TOP ? TOP_ROW_MOD : 0);
-    
+
     for(int i = 0; i < num_keys; ++i){
+        if(k->keys[row][i]->letter != NULL) free(k->keys[row][i]->letter);
         free(k->keys[row][i]);
     }
+    free(k->keys[row]);
 }
 
 // ToDo: update destructor

@@ -51,7 +51,7 @@ void DrawLetterCell(LetterCell *cell){
     }
     if (border){
         borderSize = BORDER_SIZE;
-        DrawRectangle(cell->bounds.x, cell->bounds.y, cell->bounds.x, cell->bounds.y, borderColor);
+        DrawRectangle(cell->bounds.x, cell->bounds.y, cell->bounds.width, cell->bounds.height, borderColor);
     }
     DrawRectangle(cell->bounds.x+borderSize, cell->bounds.y+borderSize, cell->bounds.width-borderSize*2, cell->bounds.height-borderSize*2, cellColor);
 
