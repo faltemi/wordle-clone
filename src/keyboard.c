@@ -37,11 +37,12 @@ void fillRow(Keyboard *k, KeyboardRow row){
     LetterCell **curRow = malloc(num_keys * sizeof(LetterCell*));
     
     const char **row_key_map = getKeyMapArr(row);
-    const int offsetX = (GetScreenWidth() - (num_keys*k->keySize.x))/2;
+    const int offsetX = (GetScreenWidth() - (num_keys*k->keySize.x + k->keyPadding*(num_keys-1)))/2;
+    const int padY = row == 0 ? 0 : k->keyPadding;
     for(int i = 0; i < num_keys; ++i){
         LetterCell *newCell = malloc(sizeof(LetterCell));
-        Vector2 cellPos = {i*k->keySize.x + offsetX, (int)row*k->keySize.y + k->position.y};
-        InitLetterCell(newCell, cellPos, k->keySize, 4);
+        Vector2 cellPos = {i*(k->keySize.x + (i == 0 ? 0 : k->keyPadding)) + offsetX, (int)row*(k->keySize.y + padY) + k->position.y};
+        InitLetterCell(newCell, cellPos, k->keySize, k->fontSize);
         newCell->letter = strdup(row_key_map[i]); // This might be POSIX only
         newCell->state = KEYBOARD;
         curRow[i] = newCell;
@@ -50,17 +51,18 @@ void fillRow(Keyboard *k, KeyboardRow row){
 }
 
 Keyboard *createKeyboard(Vector2 postion, Vector2 keySize, int fontSize, int keyPadding, Color primary, Color secondary){
-    Keyboard *keyboard = malloc(sizeof(Keyboard));
-    keyboard->position = postion;
-    keyboard->fontSize = fontSize;
-    keyboard->keySize = keySize;
-    keyboard->primaryC = primary;
-    keyboard->secondaryC = secondary;
-    fillRow(keyboard, TOP);
-    fillRow(keyboard, MIDDLE);
-    fillRow(keyboard, BOTTOM);
+    Keyboard *k = malloc(sizeof(Keyboard));
+    k->position = postion;
+    k->fontSize = fontSize;
+    k->keySize = keySize;
+    k->keyPadding = keyPadding;
+    k->primaryC = primary;
+    k->secondaryC = secondary;
+    fillRow(k, TOP);
+    fillRow(k, MIDDLE);
+    fillRow(k, BOTTOM);
     // Init first row
-    return keyboard;
+    return k;
 }
 
 static void freeRow(Keyboard *k, KeyboardRow row){

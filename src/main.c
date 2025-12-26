@@ -54,7 +54,7 @@ int main(){
     }
 
     // ToDo: Actually use cell params to make keyb
-    Keyboard *keyb = createKeyboard((Vector2) {200,450}, (Vector2) {30, 30}, 8, 3, LIGHTGRAY, YELLOW);
+    Keyboard *keyb = createKeyboard((Vector2) {200,450}, (Vector2) {30, 30}, 10, 10, LIGHTGRAY, YELLOW);
 
     // Desired framerate
     SetTargetFPS(60);
