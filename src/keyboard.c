@@ -43,15 +43,16 @@ void fillRow(Keyboard *k, KeyboardRow row){
         Vector2 cellPos = {i*k->keySize.x + offsetX, (int)row*k->keySize.y + k->position.y};
         InitLetterCell(newCell, cellPos, k->keySize, 4);
         newCell->letter = strdup(row_key_map[i]); // This might be POSIX only
-
+        newCell->state = KEYBOARD;
         curRow[i] = newCell;
     }
     k->keys[row] = curRow;
 }
 
-Keyboard *createKeyboard(Vector2 postion, Vector2 keySize, int keyPadding, Color primary, Color secondary){
+Keyboard *createKeyboard(Vector2 postion, Vector2 keySize, int fontSize, int keyPadding, Color primary, Color secondary){
     Keyboard *keyboard = malloc(sizeof(Keyboard));
     keyboard->position = postion;
+    keyboard->fontSize = fontSize;
     keyboard->keySize = keySize;
     keyboard->primaryC = primary;
     keyboard->secondaryC = secondary;

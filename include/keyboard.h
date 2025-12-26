@@ -18,6 +18,7 @@ typedef enum KeyboardRow {
 typedef struct Keyboard {
     Vector2 position; // top left
     Vector2 keySize;
+    int fontSize;
     int keyPadding;
     Color primaryC;
     Color secondaryC;
@@ -25,7 +26,7 @@ typedef struct Keyboard {
 
 } Keyboard;
 
-Keyboard *createKeyboard(Vector2 position, Vector2 keySize, int keyPadding, Color primary, Color secondary);
+Keyboard *createKeyboard(Vector2 position, Vector2 keySize, int fontSize, int keyPadding, Color primary, Color secondary);
 void drawKeyboard(Keyboard *k);
 void releaseKeyboard(Keyboard *k);
 

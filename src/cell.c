@@ -47,6 +47,13 @@ void DrawLetterCell(LetterCell *cell){
             cellColor = RAYWHITE;
             fontColor = BLACK;
         } break;
+        case KEYBOARD:
+        {
+            border = true;
+            borderColor = DARKGRAY;
+            cellColor = RAYWHITE;
+            fontColor = BLACK;
+        } break;
         default: break;
     }
     if (border){
