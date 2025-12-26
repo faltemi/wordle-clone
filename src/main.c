@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "cell.h"
 #include "keyboard.h"
+#include <stdio.h>
 
 #define NUM_GUESSES         6
 #define NUM_LETTERS         5
@@ -8,8 +9,10 @@
 #define CELL_Y_OFFSET       50
 #define CELL_PADDING        5
 #define LETTER_SIZE         20
+#define DELETE "<"
+#define ENTER "#"
 
-typedef enum GameScreen { LOGO, TITLE, GAMEPLAY, ENDING } GameScreen;
+typedef enum GameScreen { LOGO, TITLE, GAMEPLAY, GUESSING, ENDING } GameScreen;
 
 // Position calculation for letter cells
 static inline void InitLetterCellAt(LetterCell *cell, Vector2 position) {
@@ -34,6 +37,8 @@ int main(){
     const int screenHeight = 600;
     const char *windowTitle = "Wordle Clone";
 
+    const char *testWord = "AMUSE";
+
     InitWindow(screenWidth, screenHeight, windowTitle);
     // NOTE: Load resources (textures, fonts, audio) after Window initialization
     
@@ -45,6 +50,12 @@ int main(){
 
     LetterCell cells[NUM_GUESSES][NUM_LETTERS] = { 0 };
 
+    int guessRowIdx = 0;
+    int guessLetterIdx = 0;
+    // Guessing state parameters
+    int guessingWordIndex = 0;
+    int numCorrect = 0;
+
     // Initialize letter cells
     for (int r = 0; r < NUM_GUESSES; r++){
         for (int c = 0; c < NUM_LETTERS; c++){
@@ -54,7 +65,7 @@ int main(){
     }
 
     // ToDo: Actually use cell params to make keyb
-    Keyboard *keyb = createKeyboard((Vector2) {200,450}, (Vector2) {30, 30}, 10, 10, LIGHTGRAY, YELLOW);
+    Keyboard *keyb = createKeyboard((Vector2) {200,400}, (Vector2) {40, 40}, 20, 10, LIGHTGRAY, YELLOW);
 
     // Desired framerate
     SetTargetFPS(60);
@@ -84,6 +95,68 @@ int main(){
                 framesCounter++;
                 // ToDo: Gameplay logic
                 if (IsKeyPressed(KEY_ENTER)) screen = ENDING;
+
+                // Check for clicked keyboard key
+                for(int i = 0; i < NUM_ROWS; ++i){
+                    int num_keys = NUM_ROW_KEYS + (i == 0 ? 1 : 0);
+                    for(int j = 0; j < num_keys; ++j){
+                        if(CheckCollisionPointRec(GetMousePosition(),keyb->keys[i][j]->bounds) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+                            // Key press logic: letter, enter, del
+                            if(strcmp(keyb->keys[i][j]->letter, ENTER) == 0){
+                                if(guessLetterIdx == NUM_LETTERS){
+                                    // Change state to 'guessing', freeze input and guess each letter until done
+                                    screen = GUESSING;
+                                }
+                                else{
+                                    // Shake row and display 'not enough letters'
+                                }
+                            }
+                            else if(strcmp(keyb->keys[i][j]->letter, DELETE) == 0){
+                                if(guessLetterIdx != 0) guessLetterIdx--;
+                                cells[guessRowIdx][guessLetterIdx].letter[0] = '\0';
+                                cells[guessRowIdx][guessLetterIdx].state = NO_GUESS;
+                            }
+                            else{
+                                if(guessLetterIdx < NUM_LETTERS){
+                                    TextCopy(cells[guessRowIdx][guessLetterIdx].letter, keyb->keys[i][j]->letter);
+                                    cells[guessRowIdx][guessLetterIdx].state = BEING_GUESSED;
+                                    guessLetterIdx++;
+                                }
+                            }
+                        }
+                    }
+                }
+            } break;
+            case GUESSING:
+            {
+                if(guessingWordIndex < NUM_LETTERS){
+                    // Same letter
+                    if(cells[guessRowIdx][guessingWordIndex].letter[0] == testWord[guessingWordIndex]){
+                        cells[guessRowIdx][guessingWordIndex].state = CORRECT;
+                        numCorrect++;
+                    }
+                    else{
+                        bool letterInWord = false;
+                        for(int i = guessingWordIndex; i < NUM_LETTERS; ++i){
+                            if(cells[guessRowIdx][guessingWordIndex].letter[0] == testWord[i]){
+                                letterInWord = true;
+                                break;
+                            }
+                        }
+                        cells[guessRowIdx][guessingWordIndex].state = letterInWord ? WRONG_POS : INCORRECT;
+                    }
+                    guessingWordIndex++;
+                }
+                else{
+                    if(numCorrect == NUM_LETTERS){
+                        // ToDo: Win state/win screen
+                    }
+                    guessingWordIndex = 0;
+                    numCorrect = 0;
+                    guessRowIdx++;
+                    guessLetterIdx = 0;
+                    screen = GAMEPLAY;
+                }
             } break;
             case ENDING:
                 {
@@ -114,6 +187,7 @@ int main(){
                     if ((framesCounter/30)%2 == 0)
                         DrawText("PRESS [ENTER] to START", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to START", 20)/2, GetScreenHeight()/2 + 60, 20, DARKGRAY);
                 } break;
+                case GUESSING:
                 case GAMEPLAY:
                 {
                     DrawRectangle(0, 0, screenWidth, screenHeight, RAYWHITE);

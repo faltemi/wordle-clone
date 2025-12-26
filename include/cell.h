@@ -16,7 +16,7 @@ typedef enum CellState {
 
 typedef struct LetterCell {
     Rectangle bounds;
-    char *letter;
+    char letter[8];
     int fontSize;
     CellState state;
 } LetterCell;

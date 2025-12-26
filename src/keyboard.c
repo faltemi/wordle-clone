@@ -43,7 +43,7 @@ void fillRow(Keyboard *k, KeyboardRow row){
         LetterCell *newCell = malloc(sizeof(LetterCell));
         Vector2 cellPos = {i*(k->keySize.x + (i == 0 ? 0 : k->keyPadding)) + offsetX, (int)row*(k->keySize.y + padY) + k->position.y};
         InitLetterCell(newCell, cellPos, k->keySize, k->fontSize);
-        newCell->letter = strdup(row_key_map[i]); // This might be POSIX only
+        TextCopy(newCell->letter, row_key_map[i]);
         newCell->state = KEYBOARD;
         curRow[i] = newCell;
     }
@@ -71,7 +71,6 @@ static void freeRow(Keyboard *k, KeyboardRow row){
     int num_keys = NUM_ROW_KEYS + (row == TOP ? TOP_ROW_MOD : 0);
 
     for(int i = 0; i < num_keys; ++i){
-        if(k->keys[row][i]->letter != NULL) free(k->keys[row][i]->letter);
         free(k->keys[row][i]);
     }
     free(k->keys[row]);

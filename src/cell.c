@@ -70,6 +70,6 @@ void DrawLetterCell(LetterCell *cell){
 void InitLetterCell(LetterCell *cell, Vector2 position, Vector2 size, int fontSize){
     cell->state = NO_GUESS;
     cell->fontSize = fontSize;
-    cell->letter = NULL;
+    cell->letter[0] = '\0';
     cell->bounds = (Rectangle){ position.x, position.y, size.x, size.y };
 }
