@@ -37,12 +37,11 @@ void fillRow(Keyboard *k, KeyboardRow row){
     LetterCell **curRow = malloc(num_keys * sizeof(LetterCell*));
     
     const char **row_key_map = getKeyMapArr(row);
-    const int offsetX = (GetScreenWidth() - (num_keys*30))/2;
+    const int offsetX = (GetScreenWidth() - (num_keys*k->keySize.x))/2;
     for(int i = 0; i < num_keys; ++i){
         LetterCell *newCell = malloc(sizeof(LetterCell));
-        Vector2 cellSize = {30, 30}; // ToDo: Clean this
-        Vector2 cellPos = {i*30 + offsetX, (int)row + 30};
-        InitLetterCell(newCell, cellPos, cellSize, 4);
+        Vector2 cellPos = {i*k->keySize.x + offsetX, (int)row*k->keySize.y + k->position.y};
+        InitLetterCell(newCell, cellPos, k->keySize, 4);
         newCell->letter = strdup(row_key_map[i]); // This might be POSIX only
 
         curRow[i] = newCell;

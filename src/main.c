@@ -6,7 +6,6 @@
 #define NUM_LETTERS         5
 #define CELL_SIZE           50
 #define CELL_Y_OFFSET       50
-#define CELL_X_OFFSET       150
 #define CELL_PADDING        5
 #define LETTER_SIZE         20
 
@@ -55,7 +54,7 @@ int main(){
     }
 
     // ToDo: Actually use cell params to make keyb
-    Keyboard *keyb = createKeyboard((Vector2) {0,0}, (Vector2) {30, 30}, 3, LIGHTGRAY, YELLOW);
+    Keyboard *keyb = createKeyboard((Vector2) {200,450}, (Vector2) {30, 30}, 3, LIGHTGRAY, YELLOW);
 
     // Desired framerate
     SetTargetFPS(60);
