@@ -38,3 +38,22 @@ const char* GetRandomWord(WordList *list) {
     int index = GetRandomValue(0, list->wordCount - 1);
     return list->words[index];
 }
+
+// Comparator for bsearch
+int CompareWords(const void *a, const void *b) {
+    const char *key = (const char *)a;
+    const char * const *entry = (const char * const *)b;
+    return strcmp(key, *entry);
+}
+
+bool IsValidWord(WordList *list, const char *guess) {
+    // bsearch returns a pointer to the found item, or NULL
+    void *found = bsearch(guess, list->words, list->wordCount, sizeof(char*), CompareWords);
+    return (found != NULL);
+}
+
+void FreeWordList(WordList *list) {
+    if (list->words) free(list->words);
+    if (list->fileBuffer) UnloadFileText(list->fileBuffer);
+    list->wordCount = 0;
+}

@@ -13,5 +13,7 @@ typedef struct WordList {
 
 WordList LoadWordList(const char *fileName);
 const char* GetRandomWord(WordList *list);
+bool IsValidWord(WordList *list, const char *guess);
+void FreeWordList(WordList *list);
 
 #endif // WORDLIST_H

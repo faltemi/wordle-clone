@@ -88,8 +88,8 @@ int main(){
             case GAMEPLAY:
             {
                 framesCounter++;
-                ProcessKeyboardInputs(cells, &screen, guessRowIdx, &guessLetterIdx);
-                ProcessMouseInputs(cells, keyb, &screen, guessRowIdx, &guessLetterIdx);
+                ProcessKeyboardInputs(&wordList, cells, &screen, guessRowIdx, &guessLetterIdx);
+                ProcessMouseInputs(&wordList, cells, keyb, &screen, guessRowIdx, &guessLetterIdx);
             } break;
             case GUESSING:
             {
@@ -185,6 +185,7 @@ int main(){
 
     CloseWindow();
     releaseKeyboard(keyb);
+    FreeWordList(&wordList);
     // ----------------------------------------------------------------
     return 0;
 }
