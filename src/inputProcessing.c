@@ -1,4 +1,4 @@
-#include "gameplayUtils.h"
+#include "inputProcessing.h"
 
 static void DeleteLetter(LetterCell cells[NUM_GUESSES][NUM_LETTERS], int guessRowIdx, int *guessLetterIdx){
     if(*guessLetterIdx != 0) (*guessLetterIdx)--;

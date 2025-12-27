@@ -1,7 +1,8 @@
 #include "raylib.h"
 #include "cell.h"
 #include "keyboard.h"
-#include "gameplayUtils.h"
+#include "inputProcessing.h"
+#include "guessing.h"
 #include "globals.h"
 #include <stdio.h>
 
@@ -89,34 +90,8 @@ int main(){
             } break;
             case GUESSING:
             {
-                if(guessingWordIndex < NUM_LETTERS){
-                    // Same letter
-                    if(cells[guessRowIdx][guessingWordIndex].letter[0] == testWord[guessingWordIndex]){
-                        cells[guessRowIdx][guessingWordIndex].state = CORRECT;
-                        numCorrect++;
-                    }
-                    else{
-                        bool letterInWord = false;
-                        for(int i = 0; i < NUM_LETTERS; ++i){
-                            if(cells[guessRowIdx][guessingWordIndex].letter[0] == testWord[i]){
-                                letterInWord = true;
-                                break;
-                            }
-                        }
-                        cells[guessRowIdx][guessingWordIndex].state = letterInWord ? WRONG_POS : INCORRECT;
-                    }
-                    guessingWordIndex++;
-                }
-                else{
-                    if(numCorrect == NUM_LETTERS){
-                        // ToDo: Win state/win screen
-                    }
-                    guessingWordIndex = 0;
-                    numCorrect = 0;
-                    guessRowIdx++;
-                    guessLetterIdx = 0;
-                    screen = guessRowIdx == NUM_GUESSES ? LOSE : GAMEPLAY;
-                }
+                framesCounter++;
+                ProcessGuess(cells, &screen, testWord, &guessRowIdx, &guessLetterIdx, &guessingWordIndex, &numCorrect);
             } break;
             case ENDING:
                 {
