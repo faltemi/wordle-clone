@@ -1,18 +1,9 @@
 #include "raylib.h"
 #include "cell.h"
 #include "keyboard.h"
+#include "gameplayUtils.h"
+#include "globals.h"
 #include <stdio.h>
-
-#define NUM_GUESSES         6
-#define NUM_LETTERS         5
-#define CELL_SIZE           50
-#define CELL_Y_OFFSET       50
-#define CELL_PADDING        5
-#define LETTER_SIZE         20
-#define DELETE "<"
-#define ENTER "#"
-
-typedef enum GameScreen { LOGO, TITLE, GAMEPLAY, GUESSING, ENDING } GameScreen;
 
 // Position calculation for letter cells
 static inline void InitLetterCellAt(LetterCell *cell, Vector2 position) {
@@ -93,39 +84,8 @@ int main(){
             case GAMEPLAY:
             {
                 framesCounter++;
-                // ToDo: Gameplay logic
-                if (IsKeyPressed(KEY_ENTER)) screen = ENDING;
-
-                // Check for clicked keyboard key
-                for(int i = 0; i < NUM_ROWS; ++i){
-                    int num_keys = NUM_ROW_KEYS + (i == 0 ? 1 : 0);
-                    for(int j = 0; j < num_keys; ++j){
-                        if(CheckCollisionPointRec(GetMousePosition(),keyb->keys[i][j]->bounds) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
-                            // Key press logic: letter, enter, del
-                            if(strcmp(keyb->keys[i][j]->letter, ENTER) == 0){
-                                if(guessLetterIdx == NUM_LETTERS){
-                                    // Change state to 'guessing', freeze input and guess each letter until done
-                                    screen = GUESSING;
-                                }
-                                else{
-                                    // Shake row and display 'not enough letters'
-                                }
-                            }
-                            else if(strcmp(keyb->keys[i][j]->letter, DELETE) == 0){
-                                if(guessLetterIdx != 0) guessLetterIdx--;
-                                cells[guessRowIdx][guessLetterIdx].letter[0] = '\0';
-                                cells[guessRowIdx][guessLetterIdx].state = NO_GUESS;
-                            }
-                            else{
-                                if(guessLetterIdx < NUM_LETTERS){
-                                    TextCopy(cells[guessRowIdx][guessLetterIdx].letter, keyb->keys[i][j]->letter);
-                                    cells[guessRowIdx][guessLetterIdx].state = BEING_GUESSED;
-                                    guessLetterIdx++;
-                                }
-                            }
-                        }
-                    }
-                }
+                ProcessKeyboardInputs(cells, &screen, guessRowIdx, &guessLetterIdx);
+                ProcessMouseInputs(cells, keyb, &screen, guessRowIdx, &guessLetterIdx);
             } break;
             case GUESSING:
             {
@@ -137,7 +97,7 @@ int main(){
                     }
                     else{
                         bool letterInWord = false;
-                        for(int i = guessingWordIndex; i < NUM_LETTERS; ++i){
+                        for(int i = 0; i < NUM_LETTERS; ++i){
                             if(cells[guessRowIdx][guessingWordIndex].letter[0] == testWord[i]){
                                 letterInWord = true;
                                 break;
@@ -155,7 +115,7 @@ int main(){
                     numCorrect = 0;
                     guessRowIdx++;
                     guessLetterIdx = 0;
-                    screen = GAMEPLAY;
+                    screen = guessRowIdx == NUM_GUESSES ? LOSE : GAMEPLAY;
                 }
             } break;
             case ENDING:

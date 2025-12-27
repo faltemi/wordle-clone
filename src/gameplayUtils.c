@@ -1,0 +1,66 @@
+#include "gameplayUtils.h"
+
+static void DeleteLetter(LetterCell cells[NUM_GUESSES][NUM_LETTERS], int guessRowIdx, int *guessLetterIdx){
+    if(*guessLetterIdx != 0) (*guessLetterIdx)--;
+    cells[guessRowIdx][*guessLetterIdx].letter[0] = '\0';
+    cells[guessRowIdx][*guessLetterIdx].state = NO_GUESS;
+}
+
+static void AddLetter(LetterCell cells[NUM_GUESSES][NUM_LETTERS], char letter, int guessRowIdx, int *guessLetterIdx){
+    if (letter >= 'a' && letter <= 'z') letter -= 32;
+    if(*guessLetterIdx < NUM_LETTERS && letter >= 'A' && letter <= 'Z'){
+        cells[guessRowIdx][*guessLetterIdx].letter[0] = letter;
+        cells[guessRowIdx][*guessLetterIdx].letter[1] = '\0';
+        cells[guessRowIdx][*guessLetterIdx].state = BEING_GUESSED;
+        (*guessLetterIdx)++;
+    }
+}
+
+static void GuessWord(int *guessLetterIdx, GameScreen *screen){
+    if(*guessLetterIdx == NUM_LETTERS){
+        // Change state to 'guessing', freeze input and guess each letter until done
+        *screen = GUESSING;
+    }
+    else{
+        // Shake row and display 'not enough letters'
+    }
+}
+
+void ProcessKeyboardInputs(LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameScreen *screen, int guessRowIdx, int *guessLetterIdx){
+    // Buffer of keys pressed until empty then 0
+    int key = GetCharPressed();
+    while(key > 0){
+        if((key >= 32) && (key <= 125)){
+            AddLetter(cells, (char)key, guessRowIdx, guessLetterIdx);
+        }
+        key = GetCharPressed();
+    }
+    
+    if (IsKeyPressed(KEY_ENTER)){
+        GuessWord(guessLetterIdx, screen);
+    }
+    else if (IsKeyPressed(KEY_BACKSPACE)){
+        DeleteLetter(cells, guessRowIdx, guessLetterIdx);
+    }
+}
+
+void ProcessMouseInputs(LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, GameScreen *screen, int guessRowIdx, int *guessLetterIdx){
+    // Check for clicked keyboard key
+    for(int i = 0; i < NUM_ROWS; ++i){
+        int num_keys = NUM_ROW_KEYS + (i == 0 ? 1 : 0);
+        for(int j = 0; j < num_keys; ++j){
+            if(CheckCollisionPointRec(GetMousePosition(),keyb->keys[i][j]->bounds) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+                // Key press logic: letter, enter, del
+                if(strcmp(keyb->keys[i][j]->letter, ENTER) == 0){
+                    GuessWord(guessLetterIdx, screen);
+                }
+                else if(strcmp(keyb->keys[i][j]->letter, DELETE) == 0){
+                    DeleteLetter(cells, guessRowIdx, guessLetterIdx);
+                }
+                else{
+                    AddLetter(cells, keyb->keys[i][j]->letter[0], guessRowIdx, guessLetterIdx);
+                }
+            }
+        }
+    }
+}
