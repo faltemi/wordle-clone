@@ -3,8 +3,8 @@
 #include <stdio.h>
 
 static inline void DrawLetter(LetterCell *cell, Color fontColor){
-    int posX = cell->position.x + (cell->size.x - MeasureText(cell->letter, cell->fontSize))/2;
-    int posY = cell->position.y + (cell->size.y - cell->fontSize)/2;
+    int posX = cell->bounds.x + (cell->bounds.width - MeasureText(cell->letter, cell->fontSize))/2;
+    int posY = cell->bounds.y + (cell->bounds.height - cell->fontSize)/2;
     DrawText(cell->letter, posX, posY, cell->fontSize, fontColor);
 }
 
@@ -47,25 +47,29 @@ void DrawLetterCell(LetterCell *cell){
             cellColor = RAYWHITE;
             fontColor = BLACK;
         } break;
+        case KEYBOARD:
+        {
+            border = true;
+            borderColor = DARKGRAY;
+            cellColor = RAYWHITE;
+            fontColor = BLACK;
+        } break;
         default: break;
     }
     if (border){
         borderSize = BORDER_SIZE;
-        DrawRectangle(cell->position.x, cell->position.y, cell->size.x, cell->size.y, borderColor);
+        DrawRectangle(cell->bounds.x, cell->bounds.y, cell->bounds.width, cell->bounds.height, borderColor);
     }
-    DrawRectangle(cell->position.x+borderSize, cell->position.y+borderSize, cell->size.x-borderSize*2, cell->size.y-borderSize*2, cellColor);
+    DrawRectangle(cell->bounds.x+borderSize, cell->bounds.y+borderSize, cell->bounds.width-borderSize*2, cell->bounds.height-borderSize*2, cellColor);
 
     if (cell->state != NO_GUESS && cell->letter){
         DrawLetter(cell, fontColor);
     }
 }
 
-
-void InitLetterCell(LetterCell *cell, int sizeX, int sizeY, int posX, int posY, int fontSize){
+void InitLetterCell(LetterCell *cell, Vector2 position, Vector2 size, int fontSize){
     cell->state = NO_GUESS;
     cell->fontSize = fontSize;
-    cell->letter = NULL;
-    cell->size = (Vector2){ sizeX, sizeY };
-    cell->position = (Vector2){ posX, posY };
-    cell->bounds = (Rectangle){ cell->position.x, cell->position.y, cell->size.x, cell->size.y };
+    cell->letter[0] = '\0';
+    cell->bounds = (Rectangle){ position.x, position.y, size.x, size.y };
 }

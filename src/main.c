@@ -1,29 +1,24 @@
 #include "raylib.h"
 #include "cell.h"
-
-#define NUM_GUESSES         6
-#define NUM_LETTERS         5
-#define CELL_SIZE           50
-#define CELL_Y_OFFSET       50
-#define CELL_X_OFFSET       150
-#define CELL_PADDING        5
-#define LETTER_SIZE         20
-
-typedef enum GameScreen { LOGO, TITLE, GAMEPLAY, ENDING } GameScreen;
+#include "keyboard.h"
+#include "inputProcessing.h"
+#include "guessing.h"
+#include "globals.h"
+#include <stdio.h>
 
 // Position calculation for letter cells
-static inline void InitLetterCellAt(LetterCell *cell, int row, int col) {
+static inline void InitLetterCellAt(LetterCell *cell, Vector2 position) {
     // Center with respect to padding (which isnt ba)
-    const int paddingX = col == 0 ? 0 : CELL_PADDING;
-    const int paddingY = row == 0 ? 0 : CELL_PADDING;
+    const int paddingX = position.x == 0 ? 0 : CELL_PADDING;
+    const int paddingY = position.y == 0 ? 0 : CELL_PADDING;
 
     const int totalW = NUM_LETTERS*CELL_SIZE + CELL_PADDING*(NUM_LETTERS-1);
     const int offsetX = (GetScreenWidth() - totalW)/2;
 
-    const int posX = col*(CELL_SIZE + paddingX) + offsetX;
-    const int posY = row*(CELL_SIZE + paddingY) + CELL_Y_OFFSET;
+    const int posX = position.x*(CELL_SIZE + paddingX) + offsetX;
+    const int posY = position.y*(CELL_SIZE + paddingY) + CELL_Y_OFFSET;
 
-    InitLetterCell(cell, CELL_SIZE, CELL_SIZE, posX, posY, LETTER_SIZE);
+    InitLetterCell(cell, (Vector2){posX, posY}, (Vector2){CELL_SIZE, CELL_SIZE}, LETTER_SIZE);
 }
 
 int main(){
@@ -33,6 +28,8 @@ int main(){
     const int screenWidth = 800;
     const int screenHeight = 600;
     const char *windowTitle = "Wordle Clone";
+
+    const char *testWord = "AMUSE";
 
     InitWindow(screenWidth, screenHeight, windowTitle);
     // NOTE: Load resources (textures, fonts, audio) after Window initialization
@@ -45,12 +42,22 @@ int main(){
 
     LetterCell cells[NUM_GUESSES][NUM_LETTERS] = { 0 };
 
+    int guessRowIdx = 0;
+    int guessLetterIdx = 0;
+    // Guessing state parameters
+    int guessingWordIndex = 0;
+    int numCorrect = 0;
+
     // Initialize letter cells
     for (int r = 0; r < NUM_GUESSES; r++){
         for (int c = 0; c < NUM_LETTERS; c++){
-            InitLetterCellAt(&cells[r][c], r, c);
+            Vector2 position = { .x = c, .y = r };
+            InitLetterCellAt(&cells[r][c], position);
         }
     }
+
+    // ToDo: Actually use cell params to make keyb
+    Keyboard *keyb = createKeyboard((Vector2) {200,400}, (Vector2) {40, 40}, 20, 10, LIGHTGRAY, YELLOW);
 
     // Desired framerate
     SetTargetFPS(60);
@@ -78,8 +85,13 @@ int main(){
             case GAMEPLAY:
             {
                 framesCounter++;
-                // ToDo: Gameplay logic
-                if (IsKeyPressed(KEY_ENTER)) screen = ENDING;
+                ProcessKeyboardInputs(cells, &screen, guessRowIdx, &guessLetterIdx);
+                ProcessMouseInputs(cells, keyb, &screen, guessRowIdx, &guessLetterIdx);
+            } break;
+            case GUESSING:
+            {
+                framesCounter++;
+                ProcessGuess(cells, &screen, testWord, &guessRowIdx, &guessLetterIdx, &guessingWordIndex, &numCorrect);
             } break;
             case ENDING:
                 {
@@ -110,6 +122,7 @@ int main(){
                     if ((framesCounter/30)%2 == 0)
                         DrawText("PRESS [ENTER] to START", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to START", 20)/2, GetScreenHeight()/2 + 60, 20, DARKGRAY);
                 } break;
+                case GUESSING:
                 case GAMEPLAY:
                 {
                     DrawRectangle(0, 0, screenWidth, screenHeight, RAYWHITE);
@@ -120,6 +133,9 @@ int main(){
                             DrawLetterCell(&cells[r][c]);
                         }
                     }
+
+                    // Draw keyboard
+                    drawKeyboard(keyb);
                 } break;
                 case ENDING:
                 {
@@ -137,6 +153,7 @@ int main(){
     // ----------------------------------------------------------------
 
     CloseWindow();
+    releaseKeyboard(keyb);
     // ----------------------------------------------------------------
     return 0;
 }
