@@ -27,15 +27,11 @@ int main(){
     // Initialization
     // ----------------------------------------------------------------
     SetRandomSeed(1234);
-    // Window setup parameters
-    const int screenWidth = 800;
-    const int screenHeight = 600;
-    const char *windowTitle = "Wordle Clone";
 
     WordList wordList = LoadWordList(WORDSPATH);
     const char *targetWord = GetRandomWord(&wordList);
     printf("DEBUG: Loaded %s\n", targetWord);
-    InitWindow(screenWidth, screenHeight, windowTitle);
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
     // NOTE: Load resources (textures, fonts, audio) after Window initialization
     
     // Setup initial game state
@@ -144,7 +140,7 @@ int main(){
                 } break;
                 case TITLE:
                 {
-                    DrawRectangle(0, 0, screenWidth, screenHeight, DARKBROWN);
+                    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, DARKBROWN);
                     DrawText("\"WORDLE\"", (GetScreenWidth() - MeasureText("\"WORDLE\"", 40))/2, GetScreenHeight()/2, 40, DARKGREEN);
                     // Every half second toggle text (60 fps)
                     if ((framesCounter/30)%2 == 0)
@@ -153,11 +149,11 @@ int main(){
                 case GUESSING:
                 case GAMEPLAY:
                 {
-                    DrawMainGameplayScreen(cells, keyb, screenWidth, screenHeight);
+                    DrawMainGameplayScreen(cells, keyb, SCREEN_WIDTH, SCREEN_HEIGHT);
                 } break;
                 case WIN:
                 {
-                    DrawMainGameplayScreen(cells, keyb, screenWidth, screenHeight);
+                    DrawMainGameplayScreen(cells, keyb, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 
                     DrawText("WELL DONE!", (GetScreenWidth() - MeasureText("WELL DONE!", 40))/2, 10, 40, DARKGREEN);
@@ -167,7 +163,7 @@ int main(){
                 } break;
                 case LOSE:
                 {
-                    DrawMainGameplayScreen(cells, keyb, screenWidth, screenHeight);
+                    DrawMainGameplayScreen(cells, keyb, SCREEN_WIDTH, SCREEN_HEIGHT);
 
                     DrawText("SO CLOSE!", (GetScreenWidth() - MeasureText("SO CLOSE!", 40))/2, 10, 40, DARKPURPLE);
                     if((framesCounter/30)%2 == 0){
