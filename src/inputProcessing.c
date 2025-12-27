@@ -16,17 +16,33 @@ static void AddLetter(LetterCell cells[NUM_GUESSES][NUM_LETTERS], char letter, i
     }
 }
 
-static void GuessWord(int *guessLetterIdx, GameScreen *screen){
+static void GetWord(LetterCell cells[NUM_GUESSES][NUM_LETTERS], int guessRowIdx, char *outputBuffer){
+    for(int i = 0; i < NUM_LETTERS; ++i){
+        outputBuffer[i] = cells[guessRowIdx][i].letter[0];
+    }
+    outputBuffer[NUM_LETTERS] = '\0';
+}
+
+static void GuessWord(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], int guessRowIdx, int *guessLetterIdx, GameScreen *screen){
     if(*guessLetterIdx == NUM_LETTERS){
-        // Change state to 'guessing', freeze input and guess each letter until done
-        *screen = GUESSING;
+        char guessedWord[NUM_LETTERS+1];
+        GetWord(cells, guessRowIdx, guessedWord);
+        
+        if(IsValidWord(wordList, guessedWord)){
+            // Change state to 'guessing', freeze input and guess each letter until done
+            *screen = GUESSING;
+        }
+        else{
+            // Need to display invalid word or something, get info out via flag?
+            
+        }
     }
     else{
         // Shake row and display 'not enough letters'
     }
 }
 
-void ProcessKeyboardInputs(LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameScreen *screen, int guessRowIdx, int *guessLetterIdx){
+void ProcessKeyboardInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameScreen *screen, int guessRowIdx, int *guessLetterIdx){
     // Buffer of keys pressed until empty then 0
     int key = GetCharPressed();
     while(key > 0){
@@ -37,14 +53,14 @@ void ProcessKeyboardInputs(LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameScree
     }
     
     if (IsKeyPressed(KEY_ENTER)){
-        GuessWord(guessLetterIdx, screen);
+        GuessWord(wordList, cells, guessRowIdx, guessLetterIdx, screen);
     }
     else if (IsKeyPressed(KEY_BACKSPACE)){
         DeleteLetter(cells, guessRowIdx, guessLetterIdx);
     }
 }
 
-void ProcessMouseInputs(LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, GameScreen *screen, int guessRowIdx, int *guessLetterIdx){
+void ProcessMouseInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, GameScreen *screen, int guessRowIdx, int *guessLetterIdx){
     // Check for clicked keyboard key
     for(int i = 0; i < NUM_ROWS; ++i){
         int num_keys = NUM_ROW_KEYS + (i == 0 ? 1 : 0);
@@ -52,7 +68,7 @@ void ProcessMouseInputs(LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *ke
             if(CheckCollisionPointRec(GetMousePosition(),keyb->keys[i][j]->bounds) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
                 // Key press logic: letter, enter, del
                 if(strcmp(keyb->keys[i][j]->letter, ENTER) == 0){
-                    GuessWord(guessLetterIdx, screen);
+                    GuessWord(wordList, cells, guessRowIdx, guessLetterIdx, screen);
                 }
                 else if(strcmp(keyb->keys[i][j]->letter, DELETE) == 0){
                     DeleteLetter(cells, guessRowIdx, guessLetterIdx);

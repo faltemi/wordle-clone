@@ -49,12 +49,12 @@ if (WIN32)
 endif()
 
 # Copy assets to build dir for easy F5-run in VS Code
-# add_custom_command(TARGET wordle POST_BUILD
-#   COMMAND ${CMAKE_COMMAND} -E copy_directory
-#           ${CMAKE_SOURCE_DIR}/assets
-#           $<TARGET_FILE_DIR:wordle>/assets
-# )
+add_custom_command(TARGET wordle POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+          ${CMAKE_SOURCE_DIR}/data
+          $<TARGET_FILE_DIR:wordle>/data
+)
 
 # Install target (useful for GitHub Releases artifacts)
 install(TARGETS wordle RUNTIME DESTINATION .)
-install(DIRECTORY assets/ DESTINATION assets)
+install(DIRECTORY data/ DESTINATION data)
