@@ -9,6 +9,7 @@
 #define LETTER_SIZE         20
 #define DELETE "<"
 #define ENTER "#"
+#define WORDSPATH "data/words.txt"
 
 typedef enum GameScreen { LOGO, TITLE, GAMEPLAY, GUESSING, LOSE, WIN, ENDING } GameScreen;
 

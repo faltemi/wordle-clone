@@ -5,6 +5,7 @@
 #include "draw.h"
 #include "guessing.h"
 #include "globals.h"
+#include "wordList.h"
 #include <stdio.h>
 
 // Position calculation for letter cells
@@ -25,13 +26,15 @@ static inline void InitLetterCellAt(LetterCell *cell, Vector2 position) {
 int main(){
     // Initialization
     // ----------------------------------------------------------------
+    SetRandomSeed(1234);
     // Window setup parameters
     const int screenWidth = 800;
     const int screenHeight = 600;
     const char *windowTitle = "Wordle Clone";
 
-    char *testWord = "AMUSE";
-
+    WordList wordList = LoadWordList(WORDSPATH);
+    const char *targetWord = GetRandomWord(&wordList);
+    printf("DEBUG: Loaded %s\n", targetWord);
     InitWindow(screenWidth, screenHeight, windowTitle);
     // NOTE: Load resources (textures, fonts, audio) after Window initialization
     
@@ -91,7 +94,7 @@ int main(){
             case GUESSING:
             {
                 framesCounter++;
-                ProcessGuess(cells, &screen, testWord, &guessRowIdx, &guessLetterIdx, &guessingWordIndex, &numCorrect);
+                ProcessGuess(cells, &screen, targetWord, &guessRowIdx, &guessLetterIdx, &guessingWordIndex, &numCorrect);
             } break;
             case WIN:
             case LOSE:
