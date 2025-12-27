@@ -14,7 +14,7 @@ void DrawMainGameplayScreen(LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard
     drawKeyboard(keyb);
 }
 
-void DrawNotification(Notification n, LetterCell[NUM_GUESSES][NUM_LETTERS], int guessRowIdx){
+void DrawNotification(Notification n, LetterCell cells[NUM_GUESSES][NUM_LETTERS], int guessRowIdx){
     switch(n){
         case NONE:
         {break;}
