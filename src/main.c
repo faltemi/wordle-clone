@@ -2,6 +2,7 @@
 #include "cell.h"
 #include "keyboard.h"
 #include "inputProcessing.h"
+#include "draw.h"
 #include "guessing.h"
 #include "globals.h"
 #include <stdio.h>
@@ -29,7 +30,7 @@ int main(){
     const int screenHeight = 600;
     const char *windowTitle = "Wordle Clone";
 
-    const char *testWord = "AMUSE";
+    char *testWord = "AMUSE";
 
     InitWindow(screenWidth, screenHeight, windowTitle);
     // NOTE: Load resources (textures, fonts, audio) after Window initialization
@@ -38,7 +39,6 @@ int main(){
     GameScreen screen = TITLE;
 
     int framesCounter = 0;
-    int gameResult = -1;
 
     LetterCell cells[NUM_GUESSES][NUM_LETTERS] = { 0 };
 
@@ -93,6 +93,31 @@ int main(){
                 framesCounter++;
                 ProcessGuess(cells, &screen, testWord, &guessRowIdx, &guessLetterIdx, &guessingWordIndex, &numCorrect);
             } break;
+            case WIN:
+            case LOSE:
+            {
+                framesCounter++;
+                if(IsKeyPressed(KEY_ENTER)){
+                    // Reset game
+                    guessRowIdx = 0;
+                    guessLetterIdx = 0;
+                    guessingWordIndex = 0;
+                    numCorrect = 0;
+                    // Reset keyboard
+
+                    //Reset cells
+                    for (int r = 0; r < NUM_GUESSES; r++){
+                        for (int c = 0; c < NUM_LETTERS; c++){
+                            cells[r][c].state = NO_GUESS;
+                            cells[r][c].letter[0] = '\0';
+                        }
+                    }
+
+                    // Pick new word
+                    
+                    screen = GAMEPLAY;
+                }
+            } break;
             case ENDING:
                 {
                     framesCounter++;
@@ -125,23 +150,26 @@ int main(){
                 case GUESSING:
                 case GAMEPLAY:
                 {
-                    DrawRectangle(0, 0, screenWidth, screenHeight, RAYWHITE);
-                    
-                    // Draw lettercells
-                    for (int r = 0; r < NUM_GUESSES; ++r){
-                        for(int c = 0; c < NUM_LETTERS; ++c){
-                            DrawLetterCell(&cells[r][c]);
-                        }
-                    }
-
-                    // Draw keyboard
-                    drawKeyboard(keyb);
+                    DrawMainGameplayScreen(cells, keyb, screenWidth, screenHeight);
                 } break;
-                case ENDING:
+                case WIN:
                 {
-                    DrawRectangle(0, 0, screenWidth, screenHeight, BLUE);
-                    DrawText("ENDING SCREEN", 20, 20, 40, DARKBLUE);
-                    DrawText("PRESS ENTER or TAP to RETURN to TITLE SCREEN", 120, 220, 20, DARKBLUE);
+                    DrawMainGameplayScreen(cells, keyb, screenWidth, screenHeight);
+
+
+                    DrawText("WELL DONE!", (GetScreenWidth() - MeasureText("WELL DONE!", 40))/2, 10, 40, DARKGREEN);
+                    if((framesCounter/30)%2 == 0){
+                        DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + 75, 20, DARKGRAY);
+                    }
+                } break;
+                case LOSE:
+                {
+                    DrawMainGameplayScreen(cells, keyb, screenWidth, screenHeight);
+
+                    DrawText("SO CLOSE!", (GetScreenWidth() - MeasureText("SO CLOSE!", 40))/2, 10, 40, DARKPURPLE);
+                    if((framesCounter/30)%2 == 0){
+                        DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + 75, 20, DARKGRAY);
+                    }
                 } break;
                 default: break;
             }

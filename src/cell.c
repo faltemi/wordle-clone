@@ -1,6 +1,5 @@
 #include "cell.h"
 #include <stddef.h>
-#include <stdio.h>
 
 static inline void DrawLetter(LetterCell *cell, Color fontColor){
     int posX = cell->bounds.x + (cell->bounds.width - MeasureText(cell->letter, cell->fontSize))/2;
