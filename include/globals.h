@@ -16,10 +16,4 @@
 
 typedef enum GameScreen { LOGO, TITLE, GAMEPLAY, GUESSING, LOSE, WIN, ENDING } GameScreen;
 
-typedef enum Notification {
-    NONE,
-    NOT_ENOUGH_LETTERS,
-    INVALID_WORD
-} Notification;
-
 #endif // GLOBALS_H
