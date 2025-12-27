@@ -21,7 +21,8 @@ void ProcessGuess(LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameScreen *screen
     }
     else{
         if(*numCorrect == NUM_LETTERS){
-            // ToDo: Win state/win screen
+            *screen = WIN;
+            return;
         }
         *guessingWordIndex = 0;
         (*numCorrect) = 0;
