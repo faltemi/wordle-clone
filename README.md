@@ -42,6 +42,6 @@ cmake --build build
 # 4) Run "wordle"
 The produced .exe will be in build/. Run it from the same MSYS2 shell to ensure DLLs are on PATH, or copy the needed mingw.../ucrt... DLLs next to your .exe.
 
-**Third Part Assets**
+**Third Party Assets**
 
 The word list used in this project is sourced from [wordle-list](https://github.com/tabatkins/wordle-list) by [tabatkins](https://github.com/tabatkins), used under the MIT License.
