@@ -2,15 +2,21 @@
 #define NOTIFICATION_H
 
 typedef enum Notification {
-    NONE,
-    NOT_ENOUGH_LETTERS,
-    INVALID_WORD
+    NOTIFY_NONE,
+    NOTIFY_NOT_ENOUGH_LETTERS,
+    NOTIFY_INVALID_WORD
 } Notification;
 
 typedef struct NotificationManager {
     Notification n;
-    int timer; // Subtract detla time and change n when <= 0
-    int lifespan; // If fadeout
+    int timer_s; // Subtract detla time and change n when <= 0
+    int lifespan_s; // If fadeout
 } NotificationManager;
+
+void SetNotification(NotificationManager *notifMgr, Notification n);
+
+void UpdateNotification(NotificationManager *notifMgr, float dt);
+
+void DrawNotifications(NotificationManager *notifMgr);
 
 #endif // NOTIFICATION_H

@@ -6,6 +6,7 @@
 #include "guessing.h"
 #include "globals.h"
 #include "wordList.h"
+#include "notification.h"
 #include <stdio.h>
 
 // Position calculation for letter cells
@@ -36,6 +37,9 @@ int main(){
     
     // Setup initial game state
     GameScreen screen = TITLE;
+
+    NotificationManager notificationManager;
+    SetNotification(&notificationManager, NOTIFY_NONE);
 
     int framesCounter = 0;
 
@@ -84,8 +88,8 @@ int main(){
             case GAMEPLAY:
             {
                 framesCounter++;
-                ProcessKeyboardInputs(&wordList, cells, &screen, guessRowIdx, &guessLetterIdx);
-                ProcessMouseInputs(&wordList, cells, keyb, &screen, guessRowIdx, &guessLetterIdx);
+                ProcessKeyboardInputs(&wordList, cells, &screen, guessRowIdx, &guessLetterIdx, &notificationManager);
+                ProcessMouseInputs(&wordList, cells, keyb, &screen, guessRowIdx, &guessLetterIdx, &notificationManager);
             } break;
             case GUESSING:
             {
