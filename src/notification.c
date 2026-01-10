@@ -1,5 +1,6 @@
 #include "notification.h"
 #include "raylib.h"
+#include <stdio.h>
 
 void SetNotification(NotificationManager *notifMgr, Notification n){
     notifMgr->n = n;
@@ -20,6 +21,7 @@ void SetNotification(NotificationManager *notifMgr, Notification n){
 }
 
 void UpdateNotification(NotificationManager *notifMgr, float dt){
+    printf("DEBUG: UPDATE Notification %d\n", notifMgr->n);
     if(notifMgr->timer_s > 0.0f){
         notifMgr->timer_s -= dt;
         if(notifMgr->timer_s <= 0.0f){
@@ -30,7 +32,7 @@ void UpdateNotification(NotificationManager *notifMgr, float dt){
 
 void DrawNotifications(NotificationManager *notifMgr) {
     if (notifMgr->n == NOTIFY_NONE) return;
-
+    printf("DEBUG: DRAW Notification %d\n", notifMgr->n);
     const char *text = "";
     switch (notifMgr->n) {
         case NOTIFY_NOT_ENOUGH_LETTERS: text = "Not Enough Letters"; break;
@@ -54,5 +56,5 @@ void DrawNotifications(NotificationManager *notifMgr) {
     };
 
     DrawRectangleRec(rec, Fade(BLACK, alpha));
-    DrawText(text, rec.x + pad, rec.y + 10, fontSize, Fade(WHITE, alpha));
+    DrawText(text, rec.x + pad, rec.y + 10, fontSize, Fade(RAYWHITE, alpha));
 }

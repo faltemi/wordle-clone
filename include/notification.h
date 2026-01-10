@@ -9,8 +9,8 @@ typedef enum Notification {
 
 typedef struct NotificationManager {
     Notification n;
-    int timer_s; // Subtract detla time and change n when <= 0
-    int lifespan_s; // If fadeout
+    float timer_s; // Subtract detla time and change n when <= 0
+    float lifespan_s; // If fadeout
 } NotificationManager;
 
 void SetNotification(NotificationManager *notifMgr, Notification n);

@@ -26,6 +26,7 @@ set(SOURCES
     src/guessing.c
     src/draw.c
     src/cell.c
+    src/notification.c
 )
 
 add_executable(wordle ${SOURCES})

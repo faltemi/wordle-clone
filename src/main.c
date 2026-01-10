@@ -40,6 +40,7 @@ int main(){
 
     NotificationManager notificationManager;
     SetNotification(&notificationManager, NOTIFY_NONE);
+    printf("DEBUG: Notification %d\n", notificationManager.n);
 
     int framesCounter = 0;
 
@@ -90,16 +91,19 @@ int main(){
                 framesCounter++;
                 ProcessKeyboardInputs(&wordList, cells, &screen, guessRowIdx, &guessLetterIdx, &notificationManager);
                 ProcessMouseInputs(&wordList, cells, keyb, &screen, guessRowIdx, &guessLetterIdx, &notificationManager);
+                UpdateNotification(&notificationManager, GetFrameTime());
             } break;
             case GUESSING:
             {
                 framesCounter++;
                 ProcessGuess(cells, &screen, targetWord, &guessRowIdx, &guessLetterIdx, &guessingWordIndex, &numCorrect);
+                UpdateNotification(&notificationManager, GetFrameTime());
             } break;
             case WIN:
             case LOSE:
             {
                 framesCounter++;
+                UpdateNotification(&notificationManager, GetFrameTime());
                 if(IsKeyPressed(KEY_ENTER)){
                     // Reset game
                     guessRowIdx = 0;
@@ -154,25 +158,28 @@ int main(){
                 case GAMEPLAY:
                 {
                     DrawMainGameplayScreen(cells, keyb, SCREEN_WIDTH, SCREEN_HEIGHT);
+                    DrawNotifications(&notificationManager);
                 } break;
                 case WIN:
                 {
                     DrawMainGameplayScreen(cells, keyb, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-
+                    
+                    
                     DrawText("WELL DONE!", (GetScreenWidth() - MeasureText("WELL DONE!", 40))/2, 10, 40, DARKGREEN);
                     if((framesCounter/30)%2 == 0){
                         DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + 75, 20, DARKGRAY);
                     }
+                    DrawNotifications(&notificationManager);
                 } break;
                 case LOSE:
                 {
                     DrawMainGameplayScreen(cells, keyb, SCREEN_WIDTH, SCREEN_HEIGHT);
-
+                    
                     DrawText("SO CLOSE!", (GetScreenWidth() - MeasureText("SO CLOSE!", 40))/2, 10, 40, DARKPURPLE);
                     if((framesCounter/30)%2 == 0){
                         DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + 75, 20, DARKGRAY);
                     }
+                    DrawNotifications(&notificationManager);
                 } break;
                 default: break;
             }
