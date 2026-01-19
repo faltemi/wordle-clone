@@ -1,6 +1,6 @@
 #include "keyboard.h"
 
-static const char *top_row_keys[NUM_ROW_KEYS+1] = {
+static const char *topRowKeys[NUM_ROW_KEYS+1] = {
     [0] = "Q",
     [1] = "W",
     [2] = "E",
@@ -13,7 +13,7 @@ static const char *top_row_keys[NUM_ROW_KEYS+1] = {
     [9] = "P"
 };
 
-static const char *mid_row_keys[NUM_ROW_KEYS] = {
+static const char *midRowKeys[NUM_ROW_KEYS] = {
     [0] = "A",
     [1] = "S",
     [2] = "D",
@@ -25,7 +25,7 @@ static const char *mid_row_keys[NUM_ROW_KEYS] = {
     [8] = "L"
 };
 
-static const char *bottom_row_keys[NUM_ROW_KEYS] = {
+static const char *bottomRowKeys[NUM_ROW_KEYS] = {
     [0] = "#",
     [1] = "Z",
     [2] = "X",
@@ -37,17 +37,17 @@ static const char *bottom_row_keys[NUM_ROW_KEYS] = {
     [8] = "<"
 };
 
-static const char **getKeyMapArr(KeyboardRow row){
+static const char **GetKeyMapArray(KeyboardRow row){
     switch (row)
     {
     case TOP:
-        return top_row_keys;
+        return topRowKeys;
         break;
     case MIDDLE:
-        return mid_row_keys;
+        return midRowKeys;
         break;
     case BOTTOM:
-        return bottom_row_keys;
+        return bottomRowKeys;
         break;
     default:
         return NULL;
@@ -55,7 +55,7 @@ static const char **getKeyMapArr(KeyboardRow row){
     }
 }
 
-static void drawRow(Keyboard *k, KeyboardRow row){
+static void DrawRow(Keyboard *k, KeyboardRow row){
     int num_keys = NUM_ROW_KEYS + (row == TOP ? TOP_ROW_MOD : 0);
     
     for(int i = 0; i < num_keys; ++i){
@@ -63,17 +63,17 @@ static void drawRow(Keyboard *k, KeyboardRow row){
     }
 }
 
-void drawKeyboard(Keyboard *k){
-    drawRow(k, TOP);
-    drawRow(k, MIDDLE);
-    drawRow(k, BOTTOM);
+void DrawKeyboard(Keyboard *k){
+    DrawRow(k, TOP);
+    DrawRow(k, MIDDLE);
+    DrawRow(k, BOTTOM);
 }
 
-void fillRow(Keyboard *k, KeyboardRow row){
+void FillRow(Keyboard *k, KeyboardRow row){
     int num_keys = NUM_ROW_KEYS + (row == TOP ? TOP_ROW_MOD : 0);
     LetterCell **curRow = malloc(num_keys * sizeof(LetterCell*));
     
-    const char **row_key_map = getKeyMapArr(row);
+    const char **row_key_map = GetKeyMapArray(row);
     const int offsetX = (GetScreenWidth() - (num_keys*k->keySize.x + k->keyPadding*(num_keys-1)))/2;
     const int padY = row == 0 ? 0 : k->keyPadding;
     for(int i = 0; i < num_keys; ++i){
@@ -87,7 +87,7 @@ void fillRow(Keyboard *k, KeyboardRow row){
     k->keys[row] = curRow;
 }
 
-Keyboard *createKeyboard(float postionY, Vector2 keySize, int fontSize, int keyPadding, Color primary, Color secondary){
+Keyboard *CreateKeyboard(float postionY, Vector2 keySize, int fontSize, int keyPadding, Color primary, Color secondary){
     Keyboard *k = malloc(sizeof(Keyboard));
     k->positionY = postionY;
     k->fontSize = fontSize;
@@ -95,14 +95,13 @@ Keyboard *createKeyboard(float postionY, Vector2 keySize, int fontSize, int keyP
     k->keyPadding = keyPadding;
     k->primaryC = primary;
     k->secondaryC = secondary;
-    fillRow(k, TOP);
-    fillRow(k, MIDDLE);
-    fillRow(k, BOTTOM);
-    // Init first row
+    FillRow(k, TOP);
+    FillRow(k, MIDDLE);
+    FillRow(k, BOTTOM);
     return k;
 }
 
-static void freeRow(Keyboard *k, KeyboardRow row){
+static void FreeRow(Keyboard *k, KeyboardRow row){
     if(k->keys[row] == NULL) return;
 
     int num_keys = NUM_ROW_KEYS + (row == TOP ? TOP_ROW_MOD : 0);
@@ -113,10 +112,9 @@ static void freeRow(Keyboard *k, KeyboardRow row){
     free(k->keys[row]);
 }
 
-// ToDo: update destructor
-void releaseKeyboard(Keyboard *k){
-    freeRow(k, TOP);
-    freeRow(k, MIDDLE);
-    freeRow(k, BOTTOM);
+void ReleaseKeyboard(Keyboard *k){
+    FreeRow(k, TOP);
+    FreeRow(k, MIDDLE);
+    FreeRow(k, BOTTOM);
     free(k);
 }

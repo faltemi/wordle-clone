@@ -11,11 +11,10 @@ static inline void DrawLetterCells(LetterCell cells[NUM_GUESSES][NUM_LETTERS]){
 void DrawMainGameplayScreen(LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, int screenWidth, int screenHeight){
     DrawRectangle(0, 0, screenWidth, screenHeight, RAYWHITE);
     DrawLetterCells(cells);
-    drawKeyboard(keyb);
+    DrawKeyboard(keyb);
 }
 
 void DrawRowShake(LetterCell cells[NUM_GUESSES][NUM_LETTERS], int row, int framesCounter){
-    // Will need to have buffer before changing dir
     static int shakeDir = -1;
     // Slow down shaking ToDo: make smoother
     if((framesCounter/45)%2 == 0){

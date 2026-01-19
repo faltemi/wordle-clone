@@ -21,9 +21,14 @@
 #define NOTIF_POS_Y         20
 #define NOTIF_PAD           20
 
-#define DELETE "<"
-#define ENTER "#"
-#define WORDSPATH "data/words.txt"
+#define DELETE              "<"
+#define ENTER               "#"
+#define WORDSPATH           "data/words.txt"
+
+#define RESTART_Y_OFFSET    100
+#define RESTART_TEXT_SIZE   20
+#define END_TEXT_SIZE       40
+#define END_TEXT_Y_OFFSET   10
 
 typedef enum GameScreen { LOGO, TITLE, GAMEPLAY, GUESSING, LOSE, WIN, ENDING } GameScreen;
 
