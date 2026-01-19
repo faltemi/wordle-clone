@@ -2,13 +2,18 @@
 #include "globals.h"
 #include <stddef.h>
 
-static inline void DrawLetter(LetterCell *cell, Color fontColor){
-    int posX = cell->bounds.x + (cell->bounds.width - MeasureText(cell->letter, cell->fontSize))/2;
+static inline void DrawLetter(LetterCell *cell, Color fontColor, float xSkew){
+    int posX = (cell->bounds.x + xSkew) + (cell->bounds.width - MeasureText(cell->letter, cell->fontSize))/2;
     int posY = cell->bounds.y + (cell->bounds.height - cell->fontSize)/2;
     DrawText(cell->letter, posX, posY, cell->fontSize, fontColor);
 }
 
 void DrawLetterCell(LetterCell *cell){
+    DrawLetterCellWithSkew(cell, 0);
+}
+
+// Skew allows for row shaking visual
+void DrawLetterCellWithSkew(LetterCell *cell, float xSkew){
     // Testing border
     bool border = false;
     Color borderColor = LIGHTGRAY;
@@ -56,14 +61,16 @@ void DrawLetterCell(LetterCell *cell){
         } break;
         default: break;
     }
+
+    float cellX = cell->bounds.x + xSkew;
     if (border){
         borderSize = BORDER_SIZE;
-        DrawRectangle(cell->bounds.x, cell->bounds.y, cell->bounds.width, cell->bounds.height, borderColor);
+        DrawRectangle(cellX, cell->bounds.y, cell->bounds.width, cell->bounds.height, borderColor);
     }
-    DrawRectangle(cell->bounds.x+borderSize, cell->bounds.y+borderSize, cell->bounds.width-borderSize*2, cell->bounds.height-borderSize*2, cellColor);
+    DrawRectangle(cellX+borderSize, cell->bounds.y+borderSize, cell->bounds.width-borderSize*2, cell->bounds.height-borderSize*2, cellColor);
 
     if (cell->state != NO_GUESS){
-        DrawLetter(cell, fontColor);
+        DrawLetter(cell, fontColor, xSkew);
     }
 }
 

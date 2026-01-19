@@ -10,13 +10,14 @@ typedef enum Notification {
 typedef struct NotificationManager {
     Notification n;
     float timer_s; // Subtract detla time and change n when <= 0
-    float lifespan_s; // If fadeout
+    float fadeOut_s; // Time window for fading out notification
+    float rowShake_s; // Time for row to shake
 } NotificationManager;
 
 void SetNotification(NotificationManager *notifMgr, Notification n);
 
 void UpdateNotification(NotificationManager *notifMgr, float dt);
 
-void DrawNotifications(NotificationManager *notifMgr);
+int DrawNotifications(NotificationManager *notifMgr);
 
 #endif // NOTIFICATION_H

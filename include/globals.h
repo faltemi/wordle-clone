@@ -15,6 +15,8 @@
 
 #define KEYB_POS_Y          430
 #define KEYB_CELL_SIZE      40
+#define SHAKE_SKEW          5
+#define SHAKE_DURATION      1.0f
 
 #define NOTIF_POS_Y         20
 #define NOTIF_PAD           20

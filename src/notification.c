@@ -9,13 +9,15 @@ void SetNotification(NotificationManager *notifMgr, Notification n){
         case NOTIFY_INVALID_WORD:
         case NOTIFY_NOT_ENOUGH_LETTERS:
         {
-            notifMgr->lifespan_s = 2.0f;
-            notifMgr->timer_s = 2.0f;
+            notifMgr->timer_s = 1.0f;
+            notifMgr->fadeOut_s = 0.3f;
+            notifMgr->rowShake_s = 0.25f;
         } break;
         case NOTIFY_NONE:
         {
-            notifMgr->lifespan_s = 0.0f;
             notifMgr->timer_s = 0.0f;
+            notifMgr->fadeOut_s = 0.0f;
+            notifMgr->rowShake_s = 0.0f;
         } break;
         default: break;
     }
@@ -24,25 +26,27 @@ void SetNotification(NotificationManager *notifMgr, Notification n){
 void UpdateNotification(NotificationManager *notifMgr, float dt){
     if(notifMgr->timer_s > 0.0f){
         notifMgr->timer_s -= dt;
+        notifMgr->rowShake_s -= dt;
         if(notifMgr->timer_s <= 0.0f){
             SetNotification(notifMgr, NOTIFY_NONE);
         }
     }
 }
 
-void DrawNotifications(NotificationManager *notifMgr) {
-    if (notifMgr->n == NOTIFY_NONE) return;
+// Return 1 if notification is ongoing
+int DrawNotifications(NotificationManager *notifMgr) {
+    if (notifMgr->n == NOTIFY_NONE) return 0;
 
     const char *text = "";
     switch (notifMgr->n) {
         case NOTIFY_NOT_ENOUGH_LETTERS: text = "Not Enough Letters"; break;
         case NOTIFY_INVALID_WORD:     text = "Invalid Word"; break;
-        default: return;
+        default: return 0;
     }
 
     // Calculate Fading
     float alpha = 1.0f;
-    if (notifMgr->timer_s < 0.5f) alpha = notifMgr->timer_s / 0.5f; // Fade out last 0.5s
+    if (notifMgr->timer_s < notifMgr->fadeOut_s) alpha = notifMgr->timer_s / notifMgr->fadeOut_s;
 
     // Centering Logic
     int textWidth = MeasureText(text, LETTER_SIZE) + NOTIF_PAD * 2;
@@ -55,4 +59,5 @@ void DrawNotifications(NotificationManager *notifMgr) {
 
     DrawRectangleRec(rec, Fade(BLACK, alpha));
     DrawText(text, rec.x + NOTIF_PAD, rec.y + 10, LETTER_SIZE, Fade(RAYWHITE, alpha));
+    return 1;
 }

@@ -9,10 +9,17 @@
 #include "notification.h"
 #include <stdio.h>
 
+// ToDo: Consolidate into draw.c
+static inline void ProcessNotifications(NotificationManager *nMgr, LetterCell cells[NUM_GUESSES][NUM_LETTERS], int row, int frameCounter){
+    if(DrawNotifications(nMgr) && nMgr->rowShake_s > 0){
+        DrawRowShake(cells, row, frameCounter);
+    }
+}
+
 int main(){
     // Initialization
     // ----------------------------------------------------------------
-    SetRandomSeed(1234);
+    SetRandomSeed(1234); // ToDo: make this truly random
 
     WordList wordList = LoadWordList(WORDSPATH);
     const char *targetWord = GetRandomWord(&wordList);
@@ -142,7 +149,7 @@ int main(){
                 case GAMEPLAY:
                 {
                     DrawMainGameplayScreen(cells, keyb, SCREEN_WIDTH, SCREEN_HEIGHT);
-                    DrawNotifications(&notificationManager);
+                    ProcessNotifications(&notificationManager, cells, guessRowIdx, framesCounter);
                 } break;
                 case WIN:
                 {
@@ -153,7 +160,7 @@ int main(){
                     if((framesCounter/30)%2 == 0){
                         DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + 75, 20, DARKGRAY);
                     }
-                    DrawNotifications(&notificationManager);
+                    ProcessNotifications(&notificationManager, cells, guessRowIdx, framesCounter);
                 } break;
                 case LOSE:
                 {
@@ -163,7 +170,7 @@ int main(){
                     if((framesCounter/30)%2 == 0){
                         DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + 75, 20, DARKGRAY);
                     }
-                    DrawNotifications(&notificationManager);
+                    ProcessNotifications(&notificationManager, cells, guessRowIdx, framesCounter);
                 } break;
                 default: break;
             }
