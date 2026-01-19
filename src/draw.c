@@ -14,12 +14,12 @@ void DrawMainGameplayScreen(LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard
     DrawKeyboard(keyb);
 }
 
-void DrawRowShake(LetterCell cells[NUM_GUESSES][NUM_LETTERS], int row, int framesCounter){
+void DrawRowShake(LetterCell cells[NUM_GUESSES][NUM_LETTERS], int row, int framesCounter, GameState *g){
     static int shakeDir = -1;
     // Slow down shaking ToDo: make smoother
     if((framesCounter/45)%2 == 0){
         for(int c = 0; c < NUM_LETTERS; ++c){
-            DrawLetterCellWithSkew(&cells[row][c], shakeDir*SHAKE_SKEW);
+            DrawLetterCellWithSkew(&cells[row][c], shakeDir*g->shakeSkew);
         }
         shakeDir *= -1;
     }

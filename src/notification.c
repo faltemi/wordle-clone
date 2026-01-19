@@ -34,7 +34,7 @@ void UpdateNotification(NotificationManager *notifMgr, float dt){
 }
 
 // Return 1 if notification is ongoing
-int DrawNotifications(NotificationManager *notifMgr) {
+int DrawNotifications(NotificationManager *notifMgr, GameState *g) {
     if (notifMgr->n == NOTIFY_NONE) return 0;
 
     const char *text = "";
@@ -49,15 +49,15 @@ int DrawNotifications(NotificationManager *notifMgr) {
     if (notifMgr->timer_s < notifMgr->fadeOut_s) alpha = notifMgr->timer_s / notifMgr->fadeOut_s;
 
     // Centering Logic
-    int textWidth = MeasureText(text, LETTER_SIZE) + NOTIF_PAD * 2;
+    int textWidth = MeasureText(text, g->notifFontSize) + g->notifPadding * 2;
     Rectangle rec = {
         (GetScreenWidth() - textWidth) / 2,
-        NOTIF_POS_Y,
+        g->notifPosY,
         textWidth,
-        LETTER_SIZE * 2
+        g->notifFontSize * 2
     };
 
     DrawRectangleRec(rec, Fade(BLACK, alpha));
-    DrawText(text, rec.x + NOTIF_PAD, rec.y + 10, LETTER_SIZE, Fade(RAYWHITE, alpha));
+    DrawText(text, rec.x + g->notifPadding, rec.y + 10, g->notifFontSize, Fade(RAYWHITE, alpha));
     return 1;
 }

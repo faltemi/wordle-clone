@@ -1,6 +1,6 @@
 #include "guessing.h"
 
-void ProcessGuess(LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameScreen *screen, const char *targetWord, int *guessRowIdx, int *guessLetterIdx, int *guessingWordIndex, int *numCorrect){
+void ProcessGuess(LetterCell cells[NUM_GUESSES][NUM_LETTERS], const char *targetWord, int *guessRowIdx, int *guessLetterIdx, int *guessingWordIndex, int *numCorrect, GameState *g){
     if(*guessingWordIndex < NUM_LETTERS){
         // Same letter
         if(cells[*guessRowIdx][*guessingWordIndex].letter[0] == targetWord[*guessingWordIndex]){
@@ -21,13 +21,13 @@ void ProcessGuess(LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameScreen *screen
     }
     else{
         if(*numCorrect == NUM_LETTERS){
-            *screen = WIN;
+            g->gameScreen = WIN;
             return;
         }
         *guessingWordIndex = 0;
         (*numCorrect) = 0;
         (*guessRowIdx)++;
         *guessLetterIdx = 0;
-        *screen = *guessRowIdx == NUM_GUESSES ? LOSE : GAMEPLAY;
+        g->gameScreen = *guessRowIdx == NUM_GUESSES ? LOSE : GAMEPLAY;
     }
 }

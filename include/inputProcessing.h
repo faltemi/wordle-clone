@@ -7,9 +7,10 @@
 #include "globals.h"
 #include "wordList.h"
 #include "notification.h"
-#include "settings.h"
+#include "gameState.h"
+#include "icon.h"
 
-void ProcessKeyboardInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameScreen *screen, int guessRowIdx, int *guessLetterIdx, NotificationManager *notifMgr);
-void ProcessMouseInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, GameScreen *screen, int guessRowIdx, int *guessLetterIdx, NotificationManager *notifMgr, SettingsIcon *s);
+void ProcessKeyboardInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], int guessRowIdx, int *guessLetterIdx, NotificationManager *notifMgr, GameState *g);
+void ProcessMouseInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, int guessRowIdx, int *guessLetterIdx, NotificationManager *notifMgr, Icon *s, GameState *g);
 // Process settings inputs MOUSE ONLY
 #endif // INPUTPROCESSING_H

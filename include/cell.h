@@ -2,6 +2,7 @@
 #define CELL_H
 
 #include "raylib.h"
+#include "gameState.h"
 
 #define BORDER_SIZE 2
 
@@ -25,5 +26,5 @@ typedef struct LetterCell {
 void DrawLetterCell(LetterCell *cell);
 void DrawLetterCellWithSkew(LetterCell *cell, float ySkew);
 void InitLetterCell(LetterCell *cell, Vector2 position, Vector2 size, int fontSize);
-void InitLetterCellAt(LetterCell *cell, Vector2 position);
+void InitLetterCellAt(LetterCell *cell, Vector2 position, GameState *g);
 #endif // CELL_H

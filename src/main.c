@@ -8,34 +8,36 @@
 #include "wordList.h"
 #include "notification.h"
 #include "settings.h"
+#include "icon.h"
+#include "gameState.h"
 #include <stdio.h>
 
 // ToDo: Consolidate into draw.c
-static inline void ProcessNotifications(NotificationManager *nMgr, LetterCell cells[NUM_GUESSES][NUM_LETTERS], int row, int frameCounter){
-    if(DrawNotifications(nMgr) && nMgr->rowShake_s > 0){
-        DrawRowShake(cells, row, frameCounter);
+static inline void ProcessNotifications(NotificationManager *nMgr, LetterCell cells[NUM_GUESSES][NUM_LETTERS], int row, int frameCounter, GameState *g){
+    if(DrawNotifications(nMgr, g) && nMgr->rowShake_s > 0){
+        DrawRowShake(cells, row, frameCounter, g);
     }
 }
 
 int main(){
     // Initialization
     // ----------------------------------------------------------------
+    GameState *gameState = MakeDefaultGameState();
     SetRandomSeed(1234); // ToDo: make this truly random
 
-    WordList wordList = LoadWordList(WORDSPATH);
+    WordList wordList = LoadWordList(gameState->wordsPath);
     const char *targetWord = GetRandomWord(&wordList);
     printf("DEBUG: Loaded %s\n", targetWord);
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
+    InitWindow(gameState->screenWidth, gameState->screenHeight, gameState->windowTitle);
     // NOTE: Load resources (textures, fonts, audio) after Window initialization
     
     // Setup initial game state
-    GameScreen screen = TITLE;
+    //GameScreen screen = TITLE;
 
     NotificationManager notificationManager;
     SetNotification(&notificationManager, NOTIFY_NONE);
 
-    SettingsIcon settingsIcon;
-    InitSettingsIcon(&settingsIcon, (Rectangle){0, 0, 50, 50});
+    Icon *settingsIcon = MakeIcon(ICON_SETTINGS, (Rectangle){0, 0, 50, 50});
 
     int framesCounter = 0;
 
@@ -51,12 +53,19 @@ int main(){
     for (int r = 0; r < NUM_GUESSES; r++){
         for (int c = 0; c < NUM_LETTERS; c++){
             Vector2 position = { .x = c, .y = r };
-            InitLetterCellAt(&cells[r][c], position);
+            InitLetterCellAt(&cells[r][c], position, gameState);
         }
     }
 
     // ToDo: Actually use cell params to make keyb
-    Keyboard *keyb = CreateKeyboard(KEYB_POS_Y, (Vector2) {KEYB_CELL_SIZE, KEYB_CELL_SIZE}, LETTER_SIZE, 10, LIGHTGRAY, YELLOW);
+    Keyboard *keyb = CreateKeyboard(
+        gameState->keybPosY, 
+        (Vector2) {gameState->keybCellSize, gameState->keybCellSize}, 
+        gameState->keybFontSize, 
+        gameState->keybPadding, 
+        LIGHTGRAY, 
+        YELLOW
+    );
 
     // Desired framerate
     SetTargetFPS(60);
@@ -66,32 +75,32 @@ int main(){
     while(!WindowShouldClose()){
         // Update
         // ------------------------------------------------------------
-        switch (screen){
+        switch (gameState->gameScreen){
             case LOGO:
             {
                 framesCounter++;
                 // After 3 seconds, change to title screen
                 if(framesCounter > 180){
-                    screen = TITLE;
+                    gameState->gameScreen = TITLE;
                     framesCounter = 0;
                 }
             } break;
             case TITLE:
             {
                 framesCounter++;
-                if (IsKeyPressed(KEY_ENTER)) screen = GAMEPLAY;
+                if (IsKeyPressed(KEY_ENTER)) gameState->gameScreen = GAMEPLAY;
             } break;
             case GAMEPLAY:
             {
                 framesCounter++;
-                ProcessKeyboardInputs(&wordList, cells, &screen, guessRowIdx, &guessLetterIdx, &notificationManager);
-                ProcessMouseInputs(&wordList, cells, keyb, &screen, guessRowIdx, &guessLetterIdx, &notificationManager, &settingsIcon);
+                ProcessKeyboardInputs(&wordList, cells, guessRowIdx, &guessLetterIdx, &notificationManager, gameState);
+                ProcessMouseInputs(&wordList, cells, keyb, guessRowIdx, &guessLetterIdx, &notificationManager, settingsIcon, gameState);
                 UpdateNotification(&notificationManager, GetFrameTime());
             } break;
             case GUESSING:
             {
                 framesCounter++;
-                ProcessGuess(cells, &screen, targetWord, &guessRowIdx, &guessLetterIdx, &guessingWordIndex, &numCorrect);
+                ProcessGuess(cells, targetWord, &guessRowIdx, &guessLetterIdx, &guessingWordIndex, &numCorrect, gameState);
                 UpdateNotification(&notificationManager, GetFrameTime());
             } break;
             case WIN:
@@ -117,7 +126,7 @@ int main(){
                     
                     targetWord = GetRandomWord(&wordList);
 
-                    screen = GAMEPLAY;
+                    gameState->gameScreen = GAMEPLAY;
                 }
             } break;
             case SETTINGS:
@@ -133,7 +142,7 @@ int main(){
         // ------------------------------------------------------------
         BeginDrawing();
             ClearBackground(RAYWHITE);
-            switch(screen){
+            switch(gameState->gameScreen){
                 case LOGO:
                 {
                     DrawText("LOGO SCREEN", 20, 20, 20, DARKBLUE);
@@ -141,7 +150,7 @@ int main(){
                 } break;
                 case TITLE:
                 {
-                    DrawRectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, DARKBROWN);
+                    DrawRectangle(0, 0, gameState->screenWidth, gameState->screenHeight, DARKBROWN);
                     DrawText("\"WORDLE\"", (GetScreenWidth() - MeasureText("\"WORDLE\"", 40))/2, GetScreenHeight()/2, 40, DARKGREEN);
                     // Every half second toggle text (60 fps)
                     if ((framesCounter/30)%2 == 0)
@@ -150,37 +159,37 @@ int main(){
                 case GUESSING:
                 case GAMEPLAY:
                 {
-                    DrawMainGameplayScreen(cells, keyb, SCREEN_WIDTH, SCREEN_HEIGHT);
-                    ProcessNotifications(&notificationManager, cells, guessRowIdx, framesCounter);
+                    DrawMainGameplayScreen(cells, keyb, gameState->screenWidth, gameState->screenHeight);
+                    ProcessNotifications(&notificationManager, cells, guessRowIdx, framesCounter, gameState);
                 } break;
                 case WIN:
                 {
-                    DrawMainGameplayScreen(cells, keyb, SCREEN_WIDTH, SCREEN_HEIGHT);
+                    DrawMainGameplayScreen(cells, keyb, gameState->screenWidth, gameState->screenHeight);
                     
-                    DrawText("WELL DONE!", (GetScreenWidth() - MeasureText("WELL DONE!", END_TEXT_SIZE))/2, END_TEXT_Y_OFFSET, END_TEXT_SIZE, DARKGREEN);
+                    DrawText("WELL DONE!", (GetScreenWidth() - MeasureText("WELL DONE!", gameState->endTextSize))/2, gameState->endTextOffsetY, gameState->endTextSize, DARKGREEN);
                     if((framesCounter/30)%2 == 0){
-                        DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + RESTART_Y_OFFSET, RESTART_TEXT_SIZE, DARKGRAY);
+                        DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + gameState->restartOffsetY, gameState->restartTextSize, DARKGRAY);
                     }
-                    ProcessNotifications(&notificationManager, cells, guessRowIdx, framesCounter);
+                    ProcessNotifications(&notificationManager, cells, guessRowIdx, framesCounter, gameState);
                 } break;
                 case LOSE:
                 {
-                    DrawMainGameplayScreen(cells, keyb, SCREEN_WIDTH, SCREEN_HEIGHT);
+                    DrawMainGameplayScreen(cells, keyb, gameState->screenWidth, gameState->screenHeight);
                     const char* endMessage = TextFormat("SO CLOSE! IT WAS %s.", targetWord);
-                    DrawText(endMessage, (GetScreenWidth() - MeasureText(endMessage, END_TEXT_SIZE))/2, END_TEXT_Y_OFFSET, END_TEXT_SIZE, DARKPURPLE);
+                    DrawText(endMessage, (GetScreenWidth() - MeasureText(endMessage, gameState->endTextSize))/2, gameState->endTextOffsetY, gameState->endTextSize, DARKPURPLE);
                     if((framesCounter/30)%2 == 0){
-                        DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + RESTART_Y_OFFSET, RESTART_TEXT_SIZE, DARKGRAY);
+                        DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + gameState->restartOffsetY, gameState->restartTextSize, DARKGRAY);
                     }
-                    ProcessNotifications(&notificationManager, cells, guessRowIdx, framesCounter);
+                    ProcessNotifications(&notificationManager, cells, guessRowIdx, framesCounter, gameState);
                 } break;
                 case SETTINGS:
                 {
-                    DrawMainGameplayScreen(cells, keyb, SCREEN_WIDTH, SCREEN_HEIGHT);
+                    DrawMainGameplayScreen(cells, keyb, gameState->screenWidth, gameState->screenHeight);
                     DrawSettingsScreen();
                 }
                 default: break;
             }
-            DrawSettingsIcon(&settingsIcon);
+            settingsIcon->draw(settingsIcon);
         EndDrawing();
         // ------------------------------------------------------------
     }
@@ -191,6 +200,8 @@ int main(){
     CloseWindow();
     ReleaseKeyboard(keyb);
     FreeWordList(&wordList);
+    FreeIcon(settingsIcon);
+    FreeGameState(gameState);
     // ----------------------------------------------------------------
     return 0;
 }

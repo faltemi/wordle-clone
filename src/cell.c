@@ -81,16 +81,16 @@ void InitLetterCell(LetterCell *cell, Vector2 position, Vector2 size, int fontSi
 }
 
 // Position calculation for letter cells
-void InitLetterCellAt(LetterCell *cell, Vector2 position) {
+void InitLetterCellAt(LetterCell *cell, Vector2 position, GameState *g) {
     // Center with respect to padding
-    const int paddingX = position.x == 0 ? 0 : CELL_PADDING;
-    const int paddingY = position.y == 0 ? 0 : CELL_PADDING;
+    const int paddingX = position.x == 0 ? 0 : g->cellPadding;
+    const int paddingY = position.y == 0 ? 0 : g->cellPadding;
 
-    const int totalW = NUM_LETTERS*CELL_SIZE + CELL_PADDING*(NUM_LETTERS-1);
+    const int totalW = NUM_LETTERS*g->cellSize + g->cellPadding*(NUM_LETTERS-1);
     const int offsetX = (GetScreenWidth() - totalW)/2;
 
-    const int posX = position.x*(CELL_SIZE + paddingX) + offsetX;
-    const int posY = position.y*(CELL_SIZE + paddingY) + CELL_Y_OFFSET;
+    const int posX = position.x*(g->cellSize + paddingX) + offsetX;
+    const int posY = position.y*(g->cellSize + paddingY) + g->cellOffsetY;
 
-    InitLetterCell(cell, (Vector2){posX, posY}, (Vector2){CELL_SIZE, CELL_SIZE}, LETTER_SIZE);
+    InitLetterCell(cell, (Vector2){posX, posY}, (Vector2){g->cellSize, g->cellSize}, g->cellFontSize);
 }

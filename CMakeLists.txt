@@ -19,21 +19,27 @@ set(BUILD_GAMES    OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(raylib)
 
 set(SOURCES
-    src/main.c
-    src/wordList.c
-    src/keyboard.c
-    src/inputProcessing.c
-    src/guessing.c
-    src/draw.c
     src/cell.c
+    src/draw.c
+    src/gameState.c
+    src/guessing.c
+    src/icon.c
+    src/inputProcessing.c
+    src/keyboard.c
+    src/main.c
     src/notification.c
     src/settings.c
+    src/wordList.c
+    icons/src/settingsIcon.c
 )
 
 add_executable(wordle ${SOURCES})
 
 # Tells CMake to look in 'include/' for your headers
-target_include_directories(wordle PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(wordle PRIVATE 
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/icons/include
+)
 
 # Raylib handles the platform specifics (gdi32, winmm, pthread, etc.)
 # automatically via its own interface usage requirements.

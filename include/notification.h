@@ -1,6 +1,8 @@
 #ifndef NOTIFICATION_H
 #define NOTIFICATION_H
 
+#include "gameState.h"
+
 typedef enum Notification {
     NOTIFY_NONE,
     NOTIFY_NOT_ENOUGH_LETTERS,
@@ -18,6 +20,6 @@ void SetNotification(NotificationManager *notifMgr, Notification n);
 
 void UpdateNotification(NotificationManager *notifMgr, float dt);
 
-int DrawNotifications(NotificationManager *notifMgr);
+int DrawNotifications(NotificationManager *notifMgr, GameState *g);
 
 #endif // NOTIFICATION_H

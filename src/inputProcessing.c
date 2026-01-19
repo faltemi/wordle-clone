@@ -43,7 +43,7 @@ static void GuessWord(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETT
     }
 }
 
-void ProcessKeyboardInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameScreen *screen, int guessRowIdx, int *guessLetterIdx, NotificationManager* notifMgr){
+void ProcessKeyboardInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], int guessRowIdx, int *guessLetterIdx, NotificationManager* notifMgr, GameState *g){
     // Buffer of keys pressed until empty then 0
     int key = GetCharPressed();
     while(key > 0){
@@ -54,7 +54,7 @@ void ProcessKeyboardInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM
     }
     
     if (IsKeyPressed(KEY_ENTER)){
-        GuessWord(wordList, cells, guessRowIdx, guessLetterIdx, screen, notifMgr);
+        GuessWord(wordList, cells, guessRowIdx, guessLetterIdx, &g->gameScreen, notifMgr);
     }
     else if (IsKeyPressed(KEY_BACKSPACE)){
         DeleteLetter(cells, guessRowIdx, guessLetterIdx);
@@ -62,17 +62,17 @@ void ProcessKeyboardInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM
 }
 
 // ToDo: struct for interactables instead of expanding func sig
-void ProcessMouseInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, GameScreen *screen, int guessRowIdx, int *guessLetterIdx, NotificationManager* notifMgr, SettingsIcon *s){
+void ProcessMouseInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, int guessRowIdx, int *guessLetterIdx, NotificationManager* notifMgr, Icon *s, GameState *g){
     // Check for clicked keyboard key
     for(int i = 0; i < NUM_ROWS; ++i){
         int num_keys = NUM_ROW_KEYS + (i == 0 ? 1 : 0);
         for(int j = 0; j < num_keys; ++j){
             if(CheckCollisionPointRec(GetMousePosition(),keyb->keys[i][j]->bounds) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
                 // Key press logic: letter, enter, del
-                if(strcmp(keyb->keys[i][j]->letter, ENTER) == 0){
-                    GuessWord(wordList, cells, guessRowIdx, guessLetterIdx, screen, notifMgr);
+                if(strcmp(keyb->keys[i][j]->letter, g->enterKey) == 0){
+                    GuessWord(wordList, cells, guessRowIdx, guessLetterIdx, &g->gameScreen, notifMgr);
                 }
-                else if(strcmp(keyb->keys[i][j]->letter, DELETE) == 0){
+                else if(strcmp(keyb->keys[i][j]->letter, g->deleteKey) == 0){
                     DeleteLetter(cells, guessRowIdx, guessLetterIdx);
                 }
                 else{
@@ -84,6 +84,6 @@ void ProcessMouseInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LE
     // Check for clicked settings icon
     // ToDo: POLISH: For draw check collision point and change color of bounds
     if(CheckCollisionPointRec(GetMousePosition(), s->bounds) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
-        *screen = SETTINGS;
+        g->gameScreen = SETTINGS;
     }
 }

@@ -1,0 +1,35 @@
+#include "gameState.h"
+#include <stdlib.h>
+
+GameState *MakeDefaultGameState(){
+    GameState *g = malloc(sizeof(GameState));
+    g->screenHeight = 600;
+    g->screenWidth = 800;
+    g->windowTitle = "Wordle Clone";
+    g->cellSize = 50;
+    g->cellOffsetY = 70;
+    g->cellPadding = 5;
+    g->cellFontSize = 20;
+    g->keybPosY = 430;
+    g->keybCellSize = 40;
+    g->keybFontSize = 20;
+    g->keybPadding = 10;
+    g->deleteKey = "<";
+    g->enterKey = "#";
+    g->shakeSkew = 5;
+    g->shakeDuration = 1.0f;
+    g->notifPosY = 20;
+    g->notifPadding = 20;
+    g->notifFontSize = 20;
+    g->wordsPath = "data/words.txt";
+    g->restartOffsetY = 100;
+    g->restartTextSize = 20;
+    g->endTextSize = 40;
+    g->endTextOffsetY = 10;
+    g->gameScreen = TITLE;
+    return g;
+}
+
+void FreeGameState(GameState *g){
+    free(g);
+}
