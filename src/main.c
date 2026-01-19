@@ -52,7 +52,7 @@ int main(){
     }
 
     // ToDo: Actually use cell params to make keyb
-    Keyboard *keyb = createKeyboard(KEYB_POS_Y, (Vector2) {KEYB_CELL_SIZE, KEYB_CELL_SIZE}, LETTER_SIZE, 10, LIGHTGRAY, YELLOW);
+    Keyboard *keyb = CreateKeyboard(KEYB_POS_Y, (Vector2) {KEYB_CELL_SIZE, KEYB_CELL_SIZE}, LETTER_SIZE, 10, LIGHTGRAY, YELLOW);
 
     // Desired framerate
     SetTargetFPS(60);
@@ -103,16 +103,16 @@ int main(){
                     numCorrect = 0;
                     // Reset keyboard
 
-                    //Reset cells
+                    // Reset cells
                     for (int r = 0; r < NUM_GUESSES; r++){
                         for (int c = 0; c < NUM_LETTERS; c++){
                             cells[r][c].state = NO_GUESS;
                             cells[r][c].letter[0] = '\0';
                         }
                     }
-
-                    // Pick new word
                     
+                    targetWord = GetRandomWord(&wordList);
+
                     screen = GAMEPLAY;
                 }
             } break;
@@ -155,10 +155,9 @@ int main(){
                 {
                     DrawMainGameplayScreen(cells, keyb, SCREEN_WIDTH, SCREEN_HEIGHT);
                     
-                    
-                    DrawText("WELL DONE!", (GetScreenWidth() - MeasureText("WELL DONE!", 40))/2, 10, 40, DARKGREEN);
+                    DrawText("WELL DONE!", (GetScreenWidth() - MeasureText("WELL DONE!", END_TEXT_SIZE))/2, END_TEXT_Y_OFFSET, END_TEXT_SIZE, DARKGREEN);
                     if((framesCounter/30)%2 == 0){
-                        DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + 75, 20, DARKGRAY);
+                        DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + RESTART_Y_OFFSET, RESTART_TEXT_SIZE, DARKGRAY);
                     }
                     ProcessNotifications(&notificationManager, cells, guessRowIdx, framesCounter);
                 } break;
@@ -166,9 +165,9 @@ int main(){
                 {
                     DrawMainGameplayScreen(cells, keyb, SCREEN_WIDTH, SCREEN_HEIGHT);
                     
-                    DrawText("SO CLOSE!", (GetScreenWidth() - MeasureText("SO CLOSE!", 40))/2, 10, 40, DARKPURPLE);
+                    DrawText("SO CLOSE!", (GetScreenWidth() - MeasureText("SO CLOSE!", END_TEXT_SIZE))/2, END_TEXT_Y_OFFSET, END_TEXT_SIZE, DARKPURPLE);
                     if((framesCounter/30)%2 == 0){
-                        DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + 75, 20, DARKGRAY);
+                        DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + RESTART_Y_OFFSET, RESTART_TEXT_SIZE, DARKGRAY);
                     }
                     ProcessNotifications(&notificationManager, cells, guessRowIdx, framesCounter);
                 } break;
@@ -182,7 +181,7 @@ int main(){
     // ----------------------------------------------------------------
 
     CloseWindow();
-    releaseKeyboard(keyb);
+    ReleaseKeyboard(keyb);
     FreeWordList(&wordList);
     // ----------------------------------------------------------------
     return 0;

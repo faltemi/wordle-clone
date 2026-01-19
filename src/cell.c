@@ -14,7 +14,6 @@ void DrawLetterCell(LetterCell *cell){
 
 // Skew allows for row shaking visual
 void DrawLetterCellWithSkew(LetterCell *cell, float xSkew){
-    // Testing border
     bool border = false;
     Color borderColor = LIGHTGRAY;
     Color cellColor = RAYWHITE;
@@ -83,7 +82,7 @@ void InitLetterCell(LetterCell *cell, Vector2 position, Vector2 size, int fontSi
 
 // Position calculation for letter cells
 void InitLetterCellAt(LetterCell *cell, Vector2 position) {
-    // Center with respect to padding (which isnt ba)
+    // Center with respect to padding
     const int paddingX = position.x == 0 ? 0 : CELL_PADDING;
     const int paddingY = position.y == 0 ? 0 : CELL_PADDING;
 
