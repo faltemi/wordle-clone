@@ -34,6 +34,9 @@ int main(){
     NotificationManager notificationManager;
     SetNotification(&notificationManager, NOTIFY_NONE);
 
+    SettingsIcon settingsIcon;
+    InitSettingsIcon(&settingsIcon, (Rectangle){0, 0, 50, 50});
+
     int framesCounter = 0;
 
     LetterCell cells[NUM_GUESSES][NUM_LETTERS] = { 0 };
@@ -168,7 +171,7 @@ int main(){
                 } break;
                 default: break;
             }
-            DrawSettings();
+            DrawSettingsIcon(&settingsIcon);
         EndDrawing();
         // ------------------------------------------------------------
     }
