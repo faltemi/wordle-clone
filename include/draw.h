@@ -6,6 +6,6 @@
 #include "globals.h"
 
 void DrawMainGameplayScreen(LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, int screenWidth, int screenHeight);
-void DrawNotification(Notification n, LetterCell cells[NUM_GUESSES][NUM_LETTERS], int guessRowIdx);
+void DrawRowShake(LetterCell cells[NUM_GUESSES][NUM_LETTERS], int row, int framesCounter);
 
 #endif // DRAW_H

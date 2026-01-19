@@ -23,5 +23,7 @@ typedef struct LetterCell {
 
 
 void DrawLetterCell(LetterCell *cell);
+void DrawLetterCellWithSkew(LetterCell *cell, float ySkew);
 void InitLetterCell(LetterCell *cell, Vector2 position, Vector2 size, int fontSize);
+void InitLetterCellAt(LetterCell *cell, Vector2 position);
 #endif // CELL_H
