@@ -27,6 +27,7 @@ set(SOURCES
     src/draw.c
     src/cell.c
     src/notification.c
+    src/settings.c
 )
 
 add_executable(wordle ${SOURCES})

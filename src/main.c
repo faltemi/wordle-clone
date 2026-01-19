@@ -7,6 +7,7 @@
 #include "globals.h"
 #include "wordList.h"
 #include "notification.h"
+#include "settings.h"
 #include <stdio.h>
 
 // ToDo: Consolidate into draw.c
@@ -167,6 +168,7 @@ int main(){
                 } break;
                 default: break;
             }
+            DrawSettings();
         EndDrawing();
         // ------------------------------------------------------------
     }
