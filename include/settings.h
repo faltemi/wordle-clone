@@ -14,5 +14,6 @@ typedef struct SettingsIcon {
 
 void InitSettingsIcon(SettingsIcon *s, Rectangle bounds);
 void DrawSettingsIcon(SettingsIcon *s);
+void DrawSettingsScreen();
 
 #endif // SETTINGS_H

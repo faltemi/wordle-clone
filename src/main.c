@@ -85,7 +85,7 @@ int main(){
             {
                 framesCounter++;
                 ProcessKeyboardInputs(&wordList, cells, &screen, guessRowIdx, &guessLetterIdx, &notificationManager);
-                ProcessMouseInputs(&wordList, cells, keyb, &screen, guessRowIdx, &guessLetterIdx, &notificationManager);
+                ProcessMouseInputs(&wordList, cells, keyb, &screen, guessRowIdx, &guessLetterIdx, &notificationManager, &settingsIcon);
                 UpdateNotification(&notificationManager, GetFrameTime());
             } break;
             case GUESSING:
@@ -119,6 +119,10 @@ int main(){
 
                     screen = GAMEPLAY;
                 }
+            } break;
+            case SETTINGS:
+            {
+                // ToDo: Settings screen input processor
             } break;
             default: break;
         }
@@ -169,6 +173,11 @@ int main(){
                     }
                     ProcessNotifications(&notificationManager, cells, guessRowIdx, framesCounter);
                 } break;
+                case SETTINGS:
+                {
+                    DrawMainGameplayScreen(cells, keyb, SCREEN_WIDTH, SCREEN_HEIGHT);
+                    DrawSettingsScreen();
+                }
                 default: break;
             }
             DrawSettingsIcon(&settingsIcon);

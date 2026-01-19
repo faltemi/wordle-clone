@@ -61,7 +61,8 @@ void ProcessKeyboardInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM
     }
 }
 
-void ProcessMouseInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, GameScreen *screen, int guessRowIdx, int *guessLetterIdx, NotificationManager* notifMgr){
+// ToDo: struct for interactables instead of expanding func sig
+void ProcessMouseInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, GameScreen *screen, int guessRowIdx, int *guessLetterIdx, NotificationManager* notifMgr, SettingsIcon *s){
     // Check for clicked keyboard key
     for(int i = 0; i < NUM_ROWS; ++i){
         int num_keys = NUM_ROW_KEYS + (i == 0 ? 1 : 0);
@@ -79,5 +80,10 @@ void ProcessMouseInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LE
                 }
             }
         }
+    }
+    // Check for clicked settings icon
+    // ToDo: POLISH: For draw check collision point and change color of bounds
+    if(CheckCollisionPointRec(GetMousePosition(), s->bounds) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+        *screen = SETTINGS;
     }
 }
