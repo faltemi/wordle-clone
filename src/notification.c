@@ -22,7 +22,6 @@ void SetNotification(NotificationManager *notifMgr, Notification n){
 }
 
 void UpdateNotification(NotificationManager *notifMgr, float dt){
-    printf("DEBUG: UPDATE Notification %d\n", notifMgr->n);
     if(notifMgr->timer_s > 0.0f){
         notifMgr->timer_s -= dt;
         if(notifMgr->timer_s <= 0.0f){

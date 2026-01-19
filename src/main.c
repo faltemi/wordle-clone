@@ -9,21 +9,6 @@
 #include "notification.h"
 #include <stdio.h>
 
-// Position calculation for letter cells
-static inline void InitLetterCellAt(LetterCell *cell, Vector2 position) {
-    // Center with respect to padding (which isnt ba)
-    const int paddingX = position.x == 0 ? 0 : CELL_PADDING;
-    const int paddingY = position.y == 0 ? 0 : CELL_PADDING;
-
-    const int totalW = NUM_LETTERS*CELL_SIZE + CELL_PADDING*(NUM_LETTERS-1);
-    const int offsetX = (GetScreenWidth() - totalW)/2;
-
-    const int posX = position.x*(CELL_SIZE + paddingX) + offsetX;
-    const int posY = position.y*(CELL_SIZE + paddingY) + CELL_Y_OFFSET;
-
-    InitLetterCell(cell, (Vector2){posX, posY}, (Vector2){CELL_SIZE, CELL_SIZE}, LETTER_SIZE);
-}
-
 int main(){
     // Initialization
     // ----------------------------------------------------------------
@@ -40,7 +25,6 @@ int main(){
 
     NotificationManager notificationManager;
     SetNotification(&notificationManager, NOTIFY_NONE);
-    printf("DEBUG: Notification %d\n", notificationManager.n);
 
     int framesCounter = 0;
 
