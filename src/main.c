@@ -116,12 +116,6 @@ int main(){
                     screen = GAMEPLAY;
                 }
             } break;
-            case ENDING:
-                {
-                    framesCounter++;
-                    // Game end logic
-                    if (IsKeyPressed(KEY_ENTER)) screen = TITLE;
-                } break;
             default: break;
         }
         // ------------------------------------------------------------

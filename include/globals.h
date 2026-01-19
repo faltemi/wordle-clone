@@ -30,6 +30,6 @@
 #define END_TEXT_SIZE       40
 #define END_TEXT_Y_OFFSET   10
 
-typedef enum GameScreen { LOGO, TITLE, GAMEPLAY, GUESSING, LOSE, WIN, ENDING } GameScreen;
+typedef enum GameScreen { LOGO, TITLE, GAMEPLAY, GUESSING, LOSE, WIN, SETTINGS } GameScreen;
 
 #endif // GLOBALS_H
