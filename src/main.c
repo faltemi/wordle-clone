@@ -164,8 +164,8 @@ int main(){
                 case LOSE:
                 {
                     DrawMainGameplayScreen(cells, keyb, SCREEN_WIDTH, SCREEN_HEIGHT);
-                    
-                    DrawText("SO CLOSE!", (GetScreenWidth() - MeasureText("SO CLOSE!", END_TEXT_SIZE))/2, END_TEXT_Y_OFFSET, END_TEXT_SIZE, DARKPURPLE);
+                    const char* endMessage = TextFormat("SO CLOSE! IT WAS %s.", targetWord);
+                    DrawText(endMessage, (GetScreenWidth() - MeasureText(endMessage, END_TEXT_SIZE))/2, END_TEXT_Y_OFFSET, END_TEXT_SIZE, DARKPURPLE);
                     if((framesCounter/30)%2 == 0){
                         DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + RESTART_Y_OFFSET, RESTART_TEXT_SIZE, DARKGRAY);
                     }
