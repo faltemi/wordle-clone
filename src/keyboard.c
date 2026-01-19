@@ -41,7 +41,7 @@ void fillRow(Keyboard *k, KeyboardRow row){
     const int padY = row == 0 ? 0 : k->keyPadding;
     for(int i = 0; i < num_keys; ++i){
         LetterCell *newCell = malloc(sizeof(LetterCell));
-        Vector2 cellPos = {i*(k->keySize.x + (i == 0 ? 0 : k->keyPadding)) + offsetX, (int)row*(k->keySize.y + padY) + k->position.y};
+        Vector2 cellPos = {i*(k->keySize.x + (i == 0 ? 0 : k->keyPadding)) + offsetX, (int)row*(k->keySize.y + padY) + k->positionY};
         InitLetterCell(newCell, cellPos, k->keySize, k->fontSize);
         TextCopy(newCell->letter, row_key_map[i]);
         newCell->state = KEYBOARD;
@@ -50,9 +50,9 @@ void fillRow(Keyboard *k, KeyboardRow row){
     k->keys[row] = curRow;
 }
 
-Keyboard *createKeyboard(Vector2 postion, Vector2 keySize, int fontSize, int keyPadding, Color primary, Color secondary){
+Keyboard *createKeyboard(float postionY, Vector2 keySize, int fontSize, int keyPadding, Color primary, Color secondary){
     Keyboard *k = malloc(sizeof(Keyboard));
-    k->position = postion;
+    k->positionY = postionY;
     k->fontSize = fontSize;
     k->keySize = keySize;
     k->keyPadding = keyPadding;

@@ -16,7 +16,7 @@ typedef enum KeyboardRow {
 } KeyboardRow;
 
 typedef struct Keyboard {
-    Vector2 position; // top left
+    float positionY; // Will always be centered, so just need y offset
     Vector2 keySize;
     int fontSize;
     int keyPadding;
@@ -26,7 +26,7 @@ typedef struct Keyboard {
 
 } Keyboard;
 
-Keyboard *createKeyboard(Vector2 position, Vector2 keySize, int fontSize, int keyPadding, Color primary, Color secondary);
+Keyboard *createKeyboard(float positionY, Vector2 keySize, int fontSize, int keyPadding, Color primary, Color secondary);
 void drawKeyboard(Keyboard *k);
 void releaseKeyboard(Keyboard *k);
 
