@@ -103,7 +103,7 @@ int main(){
                     numCorrect = 0;
                     // Reset keyboard
 
-                    //Reset cells
+                    // Reset cells
                     for (int r = 0; r < NUM_GUESSES; r++){
                         for (int c = 0; c < NUM_LETTERS; c++){
                             cells[r][c].state = NO_GUESS;
@@ -111,6 +111,8 @@ int main(){
                         }
                     }
                     
+                    targetWord = GetRandomWord(&wordList);
+
                     screen = GAMEPLAY;
                 }
             } break;
@@ -152,7 +154,6 @@ int main(){
                 case WIN:
                 {
                     DrawMainGameplayScreen(cells, keyb, SCREEN_WIDTH, SCREEN_HEIGHT);
-                    
                     
                     DrawText("WELL DONE!", (GetScreenWidth() - MeasureText("WELL DONE!", END_TEXT_SIZE))/2, END_TEXT_Y_OFFSET, END_TEXT_SIZE, DARKGREEN);
                     if((framesCounter/30)%2 == 0){
