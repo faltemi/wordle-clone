@@ -1,33 +1,33 @@
 #include "guessing.h"
 
-void ProcessGuess(LetterCell cells[NUM_GUESSES][NUM_LETTERS], const char *targetWord, int *guessRowIdx, int *guessLetterIdx, int *guessingWordIndex, int *numCorrect, GameState *g){
-    if(*guessingWordIndex < NUM_LETTERS){
+void ProcessGuess(LetterCell cells[NUM_GUESSES][NUM_LETTERS], const char *targetWord, GameState *g){
+    if(g->guessingWordIdx < NUM_LETTERS){
         // Same letter
-        if(cells[*guessRowIdx][*guessingWordIndex].letter[0] == targetWord[*guessingWordIndex]){
-            cells[*guessRowIdx][*guessingWordIndex].state = CORRECT;
-            (*numCorrect)++;
+        if(cells[g->guessRowIdx][g->guessingWordIdx].letter[0] == targetWord[g->guessingWordIdx]){
+            cells[g->guessRowIdx][g->guessingWordIdx].state = CORRECT;
+            g->numLettersCorrect++;
         }
         else{
             bool letterInWord = false;
             for(int i = 0; i < NUM_LETTERS; ++i){
-                if(cells[*guessRowIdx][*guessingWordIndex].letter[0] == targetWord[i]){
+                if(cells[g->guessRowIdx][g->guessingWordIdx].letter[0] == targetWord[i]){
                     letterInWord = true;
                     break;
                 }
             }
-            cells[*guessRowIdx][*guessingWordIndex].state = letterInWord ? WRONG_POS : INCORRECT;
+            cells[g->guessRowIdx][g->guessingWordIdx].state = letterInWord ? WRONG_POS : INCORRECT;
         }
-        (*guessingWordIndex)++;
+        (g->guessingWordIdx)++;
     }
     else{
-        if(*numCorrect == NUM_LETTERS){
+        if(g->numLettersCorrect == NUM_LETTERS){
             g->gameScreen = WIN;
             return;
         }
-        *guessingWordIndex = 0;
-        (*numCorrect) = 0;
-        (*guessRowIdx)++;
-        *guessLetterIdx = 0;
-        g->gameScreen = *guessRowIdx == NUM_GUESSES ? LOSE : GAMEPLAY;
+        g->guessingWordIdx = 0;
+        g->numLettersCorrect = 0;
+        g->guessRowIdx++;
+        g->guessLetterIdx = 0;
+        g->gameScreen = g->guessRowIdx == NUM_GUESSES ? LOSE : GAMEPLAY;
     }
 }

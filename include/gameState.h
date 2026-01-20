@@ -24,7 +24,6 @@ typedef struct GameState {
     int keybCellSize;
     int keybFontSize;
     int keybPadding;
-
     const char* deleteKey;
     const char* enterKey;
 
@@ -43,11 +42,20 @@ typedef struct GameState {
     int restartTextSize;
     int endTextSize;
     int endTextOffsetY;
+    
+    // Guessing
+    int guessRowIdx;
+    int guessLetterIdx;
+    // Guessing Game State Params
+    int guessingWordIdx;
+    int numLettersCorrect;
 
     GameScreen gameScreen;
+    int framesCounter;
 } GameState;
 
 GameState *MakeDefaultGameState();
+void RestartGame(GameState *g);
 void FreeGameState(GameState *g);
 
 #endif // GAME_STATE_H

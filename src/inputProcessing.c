@@ -1,18 +1,18 @@
 #include "inputProcessing.h"
 
-static void DeleteLetter(LetterCell cells[NUM_GUESSES][NUM_LETTERS], int guessRowIdx, int *guessLetterIdx){
-    if(*guessLetterIdx != 0) (*guessLetterIdx)--;
-    cells[guessRowIdx][*guessLetterIdx].letter[0] = '\0';
-    cells[guessRowIdx][*guessLetterIdx].state = NO_GUESS;
+static void DeleteLetter(LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameState *g){
+    if(g->guessLetterIdx != 0) (g->guessLetterIdx)--;
+    cells[g->guessRowIdx][g->guessLetterIdx].letter[0] = '\0';
+    cells[g->guessRowIdx][g->guessLetterIdx].state = NO_GUESS;
 }
 
-static void AddLetter(LetterCell cells[NUM_GUESSES][NUM_LETTERS], char letter, int guessRowIdx, int *guessLetterIdx){
+static void AddLetter(LetterCell cells[NUM_GUESSES][NUM_LETTERS], char letter, GameState *g){
     if (letter >= 'a' && letter <= 'z') letter -= 32;
-    if(*guessLetterIdx < NUM_LETTERS && letter >= 'A' && letter <= 'Z'){
-        cells[guessRowIdx][*guessLetterIdx].letter[0] = letter;
-        cells[guessRowIdx][*guessLetterIdx].letter[1] = '\0';
-        cells[guessRowIdx][*guessLetterIdx].state = BEING_GUESSED;
-        (*guessLetterIdx)++;
+    if(g->guessLetterIdx < NUM_LETTERS && letter >= 'A' && letter <= 'Z'){
+        cells[g->guessRowIdx][g->guessLetterIdx].letter[0] = letter;
+        cells[g->guessRowIdx][g->guessLetterIdx].letter[1] = '\0';
+        cells[g->guessRowIdx][g->guessLetterIdx].state = BEING_GUESSED;
+        g->guessLetterIdx++;
     }
 }
 
@@ -23,14 +23,14 @@ static void GetWord(LetterCell cells[NUM_GUESSES][NUM_LETTERS], int guessRowIdx,
     outputBuffer[NUM_LETTERS] = '\0';
 }
 
-static void GuessWord(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], int guessRowIdx, int *guessLetterIdx, GameScreen *screen, NotificationManager* notifMgr){
-    if(*guessLetterIdx == NUM_LETTERS){
+static void GuessWord(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], NotificationManager* notifMgr, GameState *g){
+    if(g->guessLetterIdx == NUM_LETTERS){
         char guessedWord[NUM_LETTERS+1];
-        GetWord(cells, guessRowIdx, guessedWord);
+        GetWord(cells, g->guessRowIdx, guessedWord);
         
         if(IsValidWord(wordList, guessedWord)){
             // Change state to 'guessing', freeze input and guess each letter until done
-            *screen = GUESSING;
+            g->gameScreen = GUESSING;
         }
         else{
             // Need to display invalid word or something, get info out via flag?
@@ -43,26 +43,26 @@ static void GuessWord(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETT
     }
 }
 
-void ProcessKeyboardInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], int guessRowIdx, int *guessLetterIdx, NotificationManager* notifMgr, GameState *g){
+void ProcessKeyboardInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], NotificationManager* notifMgr, GameState *g){
     // Buffer of keys pressed until empty then 0
     int key = GetCharPressed();
     while(key > 0){
         if((key >= 32) && (key <= 125)){
-            AddLetter(cells, (char)key, guessRowIdx, guessLetterIdx);
+            AddLetter(cells, (char)key, g);
         }
         key = GetCharPressed();
     }
     
     if (IsKeyPressed(KEY_ENTER)){
-        GuessWord(wordList, cells, guessRowIdx, guessLetterIdx, &g->gameScreen, notifMgr);
+        GuessWord(wordList, cells, notifMgr, g);
     }
     else if (IsKeyPressed(KEY_BACKSPACE)){
-        DeleteLetter(cells, guessRowIdx, guessLetterIdx);
+        DeleteLetter(cells, g);
     }
 }
 
 // ToDo: struct for interactables instead of expanding func sig
-void ProcessMouseInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, int guessRowIdx, int *guessLetterIdx, NotificationManager* notifMgr, Icon *s, GameState *g){
+void ProcessMouseInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, NotificationManager* notifMgr, Icon *s, GameState *g){
     // Check for clicked keyboard key
     for(int i = 0; i < NUM_ROWS; ++i){
         int num_keys = NUM_ROW_KEYS + (i == 0 ? 1 : 0);
@@ -70,13 +70,13 @@ void ProcessMouseInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LE
             if(CheckCollisionPointRec(GetMousePosition(),keyb->keys[i][j]->bounds) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
                 // Key press logic: letter, enter, del
                 if(strcmp(keyb->keys[i][j]->letter, g->enterKey) == 0){
-                    GuessWord(wordList, cells, guessRowIdx, guessLetterIdx, &g->gameScreen, notifMgr);
+                    GuessWord(wordList, cells, notifMgr, g);
                 }
                 else if(strcmp(keyb->keys[i][j]->letter, g->deleteKey) == 0){
-                    DeleteLetter(cells, guessRowIdx, guessLetterIdx);
+                    DeleteLetter(cells, g);
                 }
                 else{
-                    AddLetter(cells, keyb->keys[i][j]->letter[0], guessRowIdx, guessLetterIdx);
+                    AddLetter(cells, keyb->keys[i][j]->letter[0], g);
                 }
             }
         }
