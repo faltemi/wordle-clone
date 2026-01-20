@@ -19,6 +19,9 @@ Icon *MakeIcon(IconType type, Rectangle bounds){
     return i;
 }
 
+// ToDo: On click event, replace usage in main, then add struct to contain Icon
+// Should notif mgr be in gamestate too?
+
 void FreeIcon(Icon *i){
     switch(i->type){
         case ICON_SETTINGS:

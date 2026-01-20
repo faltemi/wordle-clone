@@ -1,16 +1,16 @@
 #include "guessing.h"
 
-void ProcessGuess(LetterCell cells[NUM_GUESSES][NUM_LETTERS], const char *targetWord, GameState *g){
+void ProcessGuess(LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameState *g){
     if(g->guessingWordIdx < NUM_LETTERS){
         // Same letter
-        if(cells[g->guessRowIdx][g->guessingWordIdx].letter[0] == targetWord[g->guessingWordIdx]){
+        if(cells[g->guessRowIdx][g->guessingWordIdx].letter[0] == g->targetWord[g->guessingWordIdx]){
             cells[g->guessRowIdx][g->guessingWordIdx].state = CORRECT;
             g->numLettersCorrect++;
         }
         else{
             bool letterInWord = false;
             for(int i = 0; i < NUM_LETTERS; ++i){
-                if(cells[g->guessRowIdx][g->guessingWordIdx].letter[0] == targetWord[i]){
+                if(cells[g->guessRowIdx][g->guessingWordIdx].letter[0] == g->targetWord[i]){
                     letterInWord = true;
                     break;
                 }

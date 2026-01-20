@@ -6,6 +6,6 @@
 #include "keyboard.h"
 #include "cell.h"
 
-void ProcessGuess(LetterCell cells[NUM_GUESSES][NUM_LETTERS], const char *targetWord, GameState *g);
+void ProcessGuess(LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameState *g);
 
 #endif // GUESSING_H

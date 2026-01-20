@@ -16,7 +16,7 @@ SettingsIcon *MakeSettingsIcon(Rectangle bounds){
 void DrawSettingsIcon(Icon *i){
     SettingsIcon *s = i->data.settings;
     // Bounds
-    DrawRectangleRec(s->bounds, BLACK);
+    DrawRectangleRec(s->bounds, RAYWHITE);
     // Spokes
     DrawRectanglePro(s->spoke, s->spokeCenter, s->spokeAngle, GRAY);
     DrawRectanglePro(s->spoke, s->spokeCenter, -s->spokeAngle, GRAY);
@@ -24,5 +24,5 @@ void DrawSettingsIcon(Icon *i){
     // Outer circle
     DrawCircle((int)s->center.x, (int)s->center.y, s->spokeLength*0.4, GRAY);
     // Inner circle
-    DrawCircle((int)s->center.x, (int)s->center.y, s->spokeLength*0.2, BLACK);
+    DrawCircle((int)s->center.x, (int)s->center.y, s->spokeLength*0.2, RAYWHITE);
 }

@@ -22,25 +22,20 @@ static inline void ProcessNotifications(NotificationManager *nMgr, LetterCell ce
 int main(){
     // Initialization
     // ----------------------------------------------------------------
-    GameState *gameState = MakeDefaultGameState();
     SetRandomSeed(1234); // ToDo: make this truly random
+    GameState *gameState = MakeDefaultGameState();
 
-    WordList wordList = LoadWordList(gameState->wordsPath);
-    const char *targetWord = GetRandomWord(&wordList);
-    printf("DEBUG: Loaded %s\n", targetWord);
     InitWindow(gameState->screenWidth, gameState->screenHeight, gameState->windowTitle);
     // NOTE: Load resources (textures, fonts, audio) after Window initialization
-    
-    // Setup initial game state
-    //GameScreen screen = TITLE;
 
+    // ToDo: Do these belong in game state?
     NotificationManager notificationManager;
     SetNotification(&notificationManager, NOTIFY_NONE);
-
-    Icon *settingsIcon = MakeIcon(ICON_SETTINGS, (Rectangle){0, 0, 50, 50});
-
+    // ToDo: Icon struct
+    Icon *settingsIcon = MakeIcon(ICON_SETTINGS, (Rectangle){gameState->screenWidth-50, 0, 50, 50});
     LetterCell cells[NUM_GUESSES][NUM_LETTERS] = { 0 };
 
+    // ToDo: Letter cell struct and better name for game grid (gameGrid?)
     // Initialize letter cells
     for (int r = 0; r < NUM_GUESSES; r++){
         for (int c = 0; c < NUM_LETTERS; c++){
@@ -83,13 +78,13 @@ int main(){
             } break;
             case GAMEPLAY:
             {
-                ProcessKeyboardInputs(&wordList, cells, &notificationManager, gameState);
-                ProcessMouseInputs(&wordList, cells, keyb, &notificationManager, settingsIcon, gameState);
+                ProcessKeyboardInputs(cells, &notificationManager, gameState);
+                ProcessMouseInputs(cells, keyb, &notificationManager, settingsIcon, gameState);
                 UpdateNotification(&notificationManager, GetFrameTime());
             } break;
             case GUESSING:
             {
-                ProcessGuess(cells, targetWord, gameState);
+                ProcessGuess(cells, gameState);
                 UpdateNotification(&notificationManager, GetFrameTime());
             } break;
             case WIN:
@@ -109,8 +104,6 @@ int main(){
                             cells[r][c].letter[0] = '\0';
                         }
                     }
-                    
-                    targetWord = GetRandomWord(&wordList);
                 }
             } break;
             case SETTINGS:
@@ -159,7 +152,7 @@ int main(){
                 case LOSE:
                 {
                     DrawMainGameplayScreen(cells, keyb, gameState->screenWidth, gameState->screenHeight);
-                    const char* endMessage = TextFormat("SO CLOSE! IT WAS %s.", targetWord);
+                    const char* endMessage = TextFormat("SO CLOSE! IT WAS %s.", gameState->targetWord);
                     DrawText(endMessage, (GetScreenWidth() - MeasureText(endMessage, gameState->endTextSize))/2, gameState->endTextOffsetY, gameState->endTextSize, DARKPURPLE);
                     if((gameState->framesCounter/30)%2 == 0){
                         DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + gameState->restartOffsetY, gameState->restartTextSize, DARKGRAY);
@@ -183,7 +176,6 @@ int main(){
 
     CloseWindow();
     ReleaseKeyboard(keyb);
-    FreeWordList(&wordList);
     FreeIcon(settingsIcon);
     FreeGameState(gameState);
     // ----------------------------------------------------------------

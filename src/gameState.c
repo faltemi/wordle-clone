@@ -26,6 +26,8 @@ GameState *MakeDefaultGameState(){
     g->notifFontSize = 20;
 
     g->wordsPath = "data/words.txt";
+    g->wordList = LoadWordList(g->wordsPath);
+    g->targetWord = GetRandomWord(g->wordList);
 
     g->restartOffsetY = 100;
     g->restartTextSize = 20;
@@ -49,8 +51,10 @@ void RestartGame(GameState *g){
     g->guessingWordIdx = 0;
     g->numLettersCorrect = 0;
     g->gameScreen = GAMEPLAY;
+    g->targetWord = GetRandomWord(g->wordList);
 }
 
 void FreeGameState(GameState *g){
+    FreeWordList(g->wordList);
     free(g);
 }

@@ -19,7 +19,7 @@ void DrawRowShake(LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameState *g){
     // Slow down shaking ToDo: make smoother
     if((g->framesCounter/45)%2 == 0){
         for(int c = 0; c < NUM_LETTERS; ++c){
-            DrawLetterCellWithSkew(&cells[g->guessingWordIdx][c], shakeDir*g->shakeSkew);
+            DrawLetterCellWithSkew(&cells[g->guessRowIdx][c], shakeDir*g->shakeSkew);
         }
         shakeDir *= -1;
     }

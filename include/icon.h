@@ -3,6 +3,7 @@
 
 #include "raylib.h"
 #include "settingsIcon.h"
+#include "gameState.h"
 #include <stdlib.h>
 
 // Forward declaration for self reference in draw method
@@ -19,7 +20,7 @@ typedef struct Icon {
     IconType type;
     Rectangle bounds; // Used for drawing contents relative to bounding range
     void (*draw)(Icon *);
-    void (*onClick)();// Add gamestate
+    void (*onClick)(GameState *);// Add gamestate
     union{
         SettingsIcon *settings;
     } data;
