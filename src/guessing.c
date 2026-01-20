@@ -1,21 +1,21 @@
 #include "guessing.h"
 
-void ProcessGuess(LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameState *g){
+void ProcessGuess(GameGrid *gameGrid, GameState *g){
     if(g->guessingWordIdx < NUM_LETTERS){
         // Same letter
-        if(cells[g->guessRowIdx][g->guessingWordIdx].letter[0] == g->targetWord[g->guessingWordIdx]){
-            cells[g->guessRowIdx][g->guessingWordIdx].state = CORRECT;
+        if(gameGrid->letterIcons[g->guessRowIdx][g->guessingWordIdx]->data.letterIcon->letter[0] == g->targetWord[g->guessingWordIdx]){
+            gameGrid->letterIcons[g->guessRowIdx][g->guessingWordIdx]->data.letterIcon->state = CORRECT;
             g->numLettersCorrect++;
         }
         else{
             bool letterInWord = false;
             for(int i = 0; i < NUM_LETTERS; ++i){
-                if(cells[g->guessRowIdx][g->guessingWordIdx].letter[0] == g->targetWord[i]){
+                if(gameGrid->letterIcons[g->guessRowIdx][g->guessingWordIdx]->data.letterIcon->letter[0] == g->targetWord[i]){
                     letterInWord = true;
                     break;
                 }
             }
-            cells[g->guessRowIdx][g->guessingWordIdx].state = letterInWord ? WRONG_POS : INCORRECT;
+            gameGrid->letterIcons[g->guessRowIdx][g->guessingWordIdx]->data.letterIcon->state = letterInWord ? WRONG_POS : INCORRECT;
         }
         (g->guessingWordIdx)++;
     }

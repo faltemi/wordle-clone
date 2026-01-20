@@ -11,6 +11,7 @@ GameState *MakeDefaultGameState(){
     g->cellOffsetY = 70;
     g->cellPadding = 5;
     g->cellFontSize = 20;
+    g->cellBorderSize = 2;
 
     g->keybPosY = 430;
     g->keybCellSize = 40;

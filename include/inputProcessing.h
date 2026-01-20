@@ -8,9 +8,10 @@
 #include "wordList.h"
 #include "notification.h"
 #include "gameState.h"
+#include "gameGrid.h"
 #include "icon.h"
 
-void ProcessKeyboardInputs(LetterCell cells[NUM_GUESSES][NUM_LETTERS], NotificationManager *notifMgr, GameState *g);
-void ProcessMouseInputs(LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, NotificationManager *notifMgr, Icon *s, GameState *g);
+void ProcessKeyboardInputs(GameGrid *gameGrid, NotificationManager *notifMgr, GameState *g);
+void ProcessMouseInputs(GameGrid *gameGrid, Keyboard *keyb, NotificationManager *notifMgr, Icon *s, GameState *g);
 // Process settings inputs MOUSE ONLY
 #endif // INPUTPROCESSING_H

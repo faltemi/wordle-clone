@@ -8,9 +8,9 @@ static inline void DrawLetterCells(LetterCell cells[NUM_GUESSES][NUM_LETTERS]){
     }
 }
 
-void DrawMainGameplayScreen(LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, int screenWidth, int screenHeight){
-    DrawRectangle(0, 0, screenWidth, screenHeight, RAYWHITE);
-    DrawLetterCells(cells);
+void DrawMainGameplayScreen(GameGrid *gameGrid, Keyboard *keyb, GameState *g){
+    DrawRectangle(0, 0, g->screenWidth, g->screenHeight, RAYWHITE);
+    DrawGameGrid(gameGrid, g);
     DrawKeyboard(keyb);
 }
 

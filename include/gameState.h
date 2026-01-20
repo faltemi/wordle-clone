@@ -19,6 +19,7 @@ typedef struct GameState {
     int cellOffsetY;
     int cellPadding;
     int cellFontSize;
+    int cellBorderSize;
 
     // Keyboard parameters
     int keybPosY;

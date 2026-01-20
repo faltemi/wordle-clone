@@ -1,5 +1,4 @@
 #include "raylib.h"
-#include "cell.h"
 #include "keyboard.h"
 #include "inputProcessing.h"
 #include "draw.h"
@@ -10,12 +9,13 @@
 #include "settings.h"
 #include "icon.h"
 #include "gameState.h"
+#include "gameGrid.h"
 #include <stdio.h>
 
 // ToDo: Consolidate into draw.c
-static inline void ProcessNotifications(NotificationManager *nMgr, LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameState *g){
+static inline void ProcessNotifications(NotificationManager *nMgr, GameGrid *grid, GameState *g){
     if(DrawNotifications(nMgr, g) && nMgr->rowShake_s > 0){
-        DrawRowShake(cells, g);
+        ShakeRow(grid, g);
     }
 }
 
@@ -32,17 +32,18 @@ int main(){
     NotificationManager notificationManager;
     SetNotification(&notificationManager, NOTIFY_NONE);
     // ToDo: Icon struct
-    Icon *settingsIcon = MakeIcon(ICON_SETTINGS, (Rectangle){gameState->screenWidth-50, 0, 50, 50});
-    LetterCell cells[NUM_GUESSES][NUM_LETTERS] = { 0 };
+    Icon *settingsIcon = MakeIcon(ICON_SETTINGS, (Rectangle){gameState->screenWidth-50, 0, 50, 50}, gameState);
+    GameGrid *gameGrid = MakeGameGrid(gameState);
+    //LetterCell cells[NUM_GUESSES][NUM_LETTERS] = { 0 };
 
     // ToDo: Letter cell struct and better name for game grid (gameGrid?)
     // Initialize letter cells
-    for (int r = 0; r < NUM_GUESSES; r++){
-        for (int c = 0; c < NUM_LETTERS; c++){
-            Vector2 position = { .x = c, .y = r };
-            InitLetterCellAt(&cells[r][c], position, gameState);
-        }
-    }
+    // for (int r = 0; r < NUM_GUESSES; r++){
+    //     for (int c = 0; c < NUM_LETTERS; c++){
+    //         Vector2 position = { .x = c, .y = r };
+    //         InitLetterCellAt(&cells[r][c], position, gameState);
+    //     }
+    // }
 
     // ToDo: Actually use cell params to make keyb
     Keyboard *keyb = CreateKeyboard(
@@ -78,13 +79,13 @@ int main(){
             } break;
             case GAMEPLAY:
             {
-                ProcessKeyboardInputs(cells, &notificationManager, gameState);
-                ProcessMouseInputs(cells, keyb, &notificationManager, settingsIcon, gameState);
+                ProcessKeyboardInputs(gameGrid, &notificationManager, gameState);
+                ProcessMouseInputs(gameGrid, keyb, &notificationManager, settingsIcon, gameState);
                 UpdateNotification(&notificationManager, GetFrameTime());
             } break;
             case GUESSING:
             {
-                ProcessGuess(cells, gameState);
+                ProcessGuess(gameGrid, gameState);
                 UpdateNotification(&notificationManager, GetFrameTime());
             } break;
             case WIN:
@@ -98,12 +99,7 @@ int main(){
                     // Reset keyboard
 
                     // Reset cells
-                    for (int r = 0; r < NUM_GUESSES; r++){
-                        for (int c = 0; c < NUM_LETTERS; c++){
-                            cells[r][c].state = NO_GUESS;
-                            cells[r][c].letter[0] = '\0';
-                        }
-                    }
+                    ResetGrid(gameGrid);
                 }
             } break;
             case SETTINGS:
@@ -136,37 +132,37 @@ int main(){
                 case GUESSING:
                 case GAMEPLAY:
                 {
-                    DrawMainGameplayScreen(cells, keyb, gameState->screenWidth, gameState->screenHeight);
-                    ProcessNotifications(&notificationManager, cells, gameState);
+                    DrawMainGameplayScreen(gameGrid, keyb, gameState);
+                    ProcessNotifications(&notificationManager, gameGrid, gameState);
                 } break;
                 case WIN:
                 {
-                    DrawMainGameplayScreen(cells, keyb, gameState->screenWidth, gameState->screenHeight);
+                    DrawMainGameplayScreen(gameGrid, keyb, gameState);
                     
                     DrawText("WELL DONE!", (GetScreenWidth() - MeasureText("WELL DONE!", gameState->endTextSize))/2, gameState->endTextOffsetY, gameState->endTextSize, DARKGREEN);
                     if((gameState->framesCounter/30)%2 == 0){
                         DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + gameState->restartOffsetY, gameState->restartTextSize, DARKGRAY);
                     }
-                    ProcessNotifications(&notificationManager, cells, gameState);
+                    ProcessNotifications(&notificationManager, gameGrid, gameState);
                 } break;
                 case LOSE:
                 {
-                    DrawMainGameplayScreen(cells, keyb, gameState->screenWidth, gameState->screenHeight);
+                    DrawMainGameplayScreen(gameGrid, keyb, gameState);
                     const char* endMessage = TextFormat("SO CLOSE! IT WAS %s.", gameState->targetWord);
                     DrawText(endMessage, (GetScreenWidth() - MeasureText(endMessage, gameState->endTextSize))/2, gameState->endTextOffsetY, gameState->endTextSize, DARKPURPLE);
                     if((gameState->framesCounter/30)%2 == 0){
                         DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + gameState->restartOffsetY, gameState->restartTextSize, DARKGRAY);
                     }
-                    ProcessNotifications(&notificationManager, cells, gameState);
+                    ProcessNotifications(&notificationManager, gameGrid, gameState);
                 } break;
                 case SETTINGS:
                 {
-                    DrawMainGameplayScreen(cells, keyb, gameState->screenWidth, gameState->screenHeight);
+                    DrawMainGameplayScreen(gameGrid, keyb, gameState);
                     DrawSettingsScreen();
                 }
                 default: break;
             }
-            settingsIcon->draw(settingsIcon);
+            settingsIcon->draw(settingsIcon, gameState);
         EndDrawing();
         // ------------------------------------------------------------
     }
@@ -176,6 +172,7 @@ int main(){
 
     CloseWindow();
     ReleaseKeyboard(keyb);
+    FreeGameGrid(gameGrid);
     FreeIcon(settingsIcon);
     FreeGameState(gameState);
     // ----------------------------------------------------------------

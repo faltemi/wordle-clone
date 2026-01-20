@@ -7,11 +7,6 @@
 #define BORDER_SIZE 2
 
 typedef enum CellState {
-    NO_GUESS,
-    WRONG_POS,
-    CORRECT,
-    INCORRECT,
-    BEING_GUESSED,
     KEYBOARD // This is for when the cells are reused for the on screen keyboard
 } CellState;
 

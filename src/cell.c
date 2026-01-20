@@ -20,37 +20,37 @@ void DrawLetterCellWithSkew(LetterCell *cell, float xSkew){
     Color fontColor = RAYWHITE;
     int borderSize = 0;
     switch(cell->state){
-        case NO_GUESS:
-        {
-            border = true;
-            borderColor = LIGHTGRAY;
-            cellColor = RAYWHITE;
-        } break;
-        case WRONG_POS:
-        {
-            border = false;
-            cellColor = YELLOW;
-            fontColor = RAYWHITE;
-        } break;
-        case CORRECT:
-        {
-            border = false;
-            cellColor = GREEN;
-            fontColor = RAYWHITE;
-        } break;
-        case INCORRECT:
-        {
-            border = false;
-            cellColor = DARKGRAY;
-            fontColor = RAYWHITE;
-        } break;
-        case BEING_GUESSED:
-        {
-            border = true;
-            borderColor = DARKGRAY;
-            cellColor = RAYWHITE;
-            fontColor = BLACK;
-        } break;
+        // case NO_GUESS:
+        // {
+        //     border = true;
+        //     borderColor = LIGHTGRAY;
+        //     cellColor = RAYWHITE;
+        // } break;
+        // case WRONG_POS:
+        // {
+        //     border = false;
+        //     cellColor = YELLOW;
+        //     fontColor = RAYWHITE;
+        // } break;
+        // case CORRECT:
+        // {
+        //     border = false;
+        //     cellColor = GREEN;
+        //     fontColor = RAYWHITE;
+        // } break;
+        // case INCORRECT:
+        // {
+        //     border = false;
+        //     cellColor = DARKGRAY;
+        //     fontColor = RAYWHITE;
+        // } break;
+        // case BEING_GUESSED:
+        // {
+        //     border = true;
+        //     borderColor = DARKGRAY;
+        //     cellColor = RAYWHITE;
+        //     fontColor = BLACK;
+        // } break;
         case KEYBOARD:
         {
             border = true;
@@ -68,13 +68,13 @@ void DrawLetterCellWithSkew(LetterCell *cell, float xSkew){
     }
     DrawRectangle(cellX+borderSize, cell->bounds.y+borderSize, cell->bounds.width-borderSize*2, cell->bounds.height-borderSize*2, cellColor);
 
-    if (cell->state != NO_GUESS){
-        DrawLetter(cell, fontColor, xSkew);
-    }
+    // if (cell->state != NO_GUESS){
+    //     DrawLetter(cell, fontColor, xSkew);
+    // }
 }
 
 void InitLetterCell(LetterCell *cell, Vector2 position, Vector2 size, int fontSize){
-    cell->state = NO_GUESS;
+    //cell->state = NO_GUESS;
     cell->fontSize = fontSize;
     cell->letter[0] = '\0';
     cell->bounds = (Rectangle){ position.x, position.y, size.x, size.y };

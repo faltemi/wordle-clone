@@ -13,7 +13,8 @@ SettingsIcon *MakeSettingsIcon(Rectangle bounds){
     return s;
 }
 
-void DrawSettingsIcon(Icon *i){
+void DrawSettingsIcon(Icon *i, GameState *g){
+    (void) g;
     SettingsIcon *s = i->data.settings;
     // Bounds
     DrawRectangleRec(s->bounds, RAYWHITE);
@@ -25,4 +26,8 @@ void DrawSettingsIcon(Icon *i){
     DrawCircle((int)s->center.x, (int)s->center.y, s->spokeLength*0.4, GRAY);
     // Inner circle
     DrawCircle((int)s->center.x, (int)s->center.y, s->spokeLength*0.2, RAYWHITE);
+}
+
+void ClickSettingsIcon(GameState *g){
+    g->gameScreen = SETTINGS;
 }

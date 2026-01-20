@@ -2,6 +2,7 @@
 #define SETTINGS_ICON_H
 
 #include "raylib.h"
+#include "gameState.h"
 #include <stdlib.h>
 
 typedef struct Icon Icon;
@@ -16,6 +17,7 @@ typedef struct SettingsIcon {
 } SettingsIcon;
 
 SettingsIcon *MakeSettingsIcon(Rectangle bounds);
-void DrawSettingsIcon(Icon *i);
+void DrawSettingsIcon(Icon *i, GameState *g);
+void ClickSettingsIcon(GameState *g);
 
 #endif // SETTINGS_ICON_H

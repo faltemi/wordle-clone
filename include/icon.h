@@ -3,6 +3,7 @@
 
 #include "raylib.h"
 #include "settingsIcon.h"
+#include "letterIcon.h"
 #include "gameState.h"
 #include <stdlib.h>
 
@@ -13,20 +14,22 @@ typedef enum IconType {
     ICON_SETTINGS,
     ICON_CLOSE,
     ICON_HARD_MODE,
-    ICON_THEME
+    ICON_THEME,
+    ICON_LETTER
 } IconType;
 
 typedef struct Icon {
     IconType type;
     Rectangle bounds; // Used for drawing contents relative to bounding range
-    void (*draw)(Icon *);
-    void (*onClick)(GameState *);// Add gamestate
+    void (*draw)(Icon *, GameState *);
+    void (*onClick)(GameState *);
     union{
         SettingsIcon *settings;
+        LetterIcon *letterIcon;
     } data;
 } Icon;
 
-Icon *MakeIcon(IconType type, Rectangle bounds);
+Icon *MakeIcon(IconType type, Rectangle bounds, GameState *g);
 void FreeIcon(Icon *i);
 
 #endif // ICON_H
