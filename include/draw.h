@@ -7,6 +7,5 @@
 #include "gameGrid.h"
 
 void DrawMainGameplayScreen(GameGrid *gameGrid, Keyboard *keyb, GameState *g);
-void DrawRowShake(LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameState *g);
 
 #endif // DRAW_H

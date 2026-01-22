@@ -19,18 +19,17 @@ set(BUILD_GAMES    OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(raylib)
 
 set(SOURCES
-    src/cell.c
     src/draw.c
     src/gameState.c
     src/guessing.c
     src/icon.c
     src/inputProcessing.c
     src/main.c
-    src/notification.c
     src/settings.c
     src/wordList.c
     components/src/gameGrid.c
     components/src/keyboard.c
+    components/src/notificationManager.c
     icons/src/letterIcon.c
     icons/src/settingsIcon.c
 )

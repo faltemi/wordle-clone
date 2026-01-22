@@ -15,7 +15,8 @@ typedef enum IconType {
     ICON_CLOSE,
     ICON_HARD_MODE,
     ICON_THEME,
-    ICON_LETTER
+    ICON_LETTER,
+    ICON_KEYB_LETTER
 } IconType;
 
 typedef struct Icon {

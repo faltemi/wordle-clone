@@ -1,5 +1,5 @@
-#ifndef NOTIFICATION_H
-#define NOTIFICATION_H
+#ifndef NOTIFICATION_MANAGER_H
+#define NOTIFICATION_MANAGER_H
 
 #include "gameState.h"
 
@@ -22,4 +22,4 @@ void UpdateNotification(NotificationManager *notifMgr, float dt);
 
 int DrawNotifications(NotificationManager *notifMgr, GameState *g);
 
-#endif // NOTIFICATION_H
+#endif // NOTIFICATION_MANAGER_H

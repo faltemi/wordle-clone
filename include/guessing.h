@@ -5,7 +5,6 @@
 #include "gameState.h"
 #include "gameGrid.h"
 #include "keyboard.h"
-#include "cell.h"
 
 void ProcessGuess(GameGrid *gameGrid, GameState *g);
 

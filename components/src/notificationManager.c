@@ -1,4 +1,4 @@
-#include "notification.h"
+#include "notificationManager.h"
 #include "globals.h"
 #include "raylib.h"
 #include <stdio.h>

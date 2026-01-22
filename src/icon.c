@@ -1,6 +1,7 @@
 #include "icon.h"
 
 static void MakeSettings(Icon *i, Rectangle bounds, GameState *g){
+    (void)g;
     i->type = ICON_SETTINGS;
     i->bounds = bounds;
     i->data.settings = MakeSettingsIcon(bounds);
@@ -13,6 +14,15 @@ static void MakeLetter(Icon *i, Rectangle bounds, GameState *g){
     i->bounds = bounds;
     i->data.letterIcon = MakeLetterIcon(bounds, g);
     i->draw = &DrawLetterIcon;
+    i->onClick = NULL;
+}
+
+static void MakeKeyboardLetter(Icon *i, Rectangle bounds, GameState *g){
+    i->type = ICON_KEYB_LETTER;
+    i->bounds = bounds;
+    i->data.letterIcon = MakeLetterIcon(bounds, g);
+    i->draw = DrawLetterIcon;
+    // ToDo: Add on click
 }
 
 // Icon factory
@@ -24,6 +34,9 @@ Icon *MakeIcon(IconType type, Rectangle bounds, GameState *g){
             break;
         case ICON_LETTER:
             MakeLetter(i, bounds, g);
+            break;
+        case ICON_KEYB_LETTER:
+            MakeKeyboardLetter(i, bounds, g);
             break;
         default: break;
     }
@@ -39,6 +52,7 @@ void FreeIcon(Icon *i){
         {
             free(i->data.settings);
         } break;
+        case ICON_KEYB_LETTER:
         case ICON_LETTER:
         {
             free(i->data.letterIcon);

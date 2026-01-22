@@ -6,13 +6,13 @@
 
 typedef struct Icon Icon;
 
+// ToDO: Rename to be GridIcon
 typedef enum LetterState {
     NO_GUESS,
     WRONG_POS,
     CORRECT,
     INCORRECT,
-    BEING_GUESSED,
-    //KEYBOARD
+    BEING_GUESSED
 } LetterState;
 
 typedef struct LetterIcon {

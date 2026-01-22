@@ -1,6 +1,22 @@
 #include "gameGrid.h"
 #include <stdlib.h>
 
+void DeleteLetter(GameGrid *gameGrid, GameState *g){
+    if(g->guessLetterIdx != 0) (g->guessLetterIdx)--;
+    gameGrid->letterIcons[g->guessRowIdx][g->guessLetterIdx]->data.letterIcon->letter[0] = '\0';
+    gameGrid->letterIcons[g->guessRowIdx][g->guessLetterIdx]->data.letterIcon->state = NO_GUESS;
+}
+
+void AddLetter(GameGrid *gameGrid, char letter, GameState *g){
+    if (letter >= 'a' && letter <= 'z') letter -= 32;
+    if(g->guessLetterIdx < NUM_LETTERS && letter >= 'A' && letter <= 'Z'){
+        gameGrid->letterIcons[g->guessRowIdx][g->guessLetterIdx]->data.letterIcon->letter[0] = letter;
+        gameGrid->letterIcons[g->guessRowIdx][g->guessLetterIdx]->data.letterIcon->letter[1] = '\0';
+        gameGrid->letterIcons[g->guessRowIdx][g->guessLetterIdx]->data.letterIcon->state = BEING_GUESSED;
+        g->guessLetterIdx++;
+    }
+}
+
 GameGrid *MakeGameGrid(GameState *g){
     GameGrid *grid = malloc(sizeof(GameGrid));
 
@@ -50,7 +66,7 @@ void ResetGrid(GameGrid *grid){
     }
 }
 
-GameGrid *FreeGameGrid(GameGrid *grid){
+void FreeGameGrid(GameGrid *grid){
     for (int r = 0; r < NUM_GUESSES; ++r){
         for (int c = 0; c < NUM_LETTERS; ++c){
             FreeIcon(grid->letterIcons[r][c]);

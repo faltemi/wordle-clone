@@ -5,7 +5,7 @@
 #include "guessing.h"
 #include "globals.h"
 #include "wordList.h"
-#include "notification.h"
+#include "notificationManager.h"
 #include "settings.h"
 #include "icon.h"
 #include "gameState.h"
@@ -34,23 +34,10 @@ int main(){
     // ToDo: Icon struct
     Icon *settingsIcon = MakeIcon(ICON_SETTINGS, (Rectangle){gameState->screenWidth-50, 0, 50, 50}, gameState);
     GameGrid *gameGrid = MakeGameGrid(gameState);
-    //LetterCell cells[NUM_GUESSES][NUM_LETTERS] = { 0 };
-
-    // ToDo: Letter cell struct and better name for game grid (gameGrid?)
-    // Initialize letter cells
-    // for (int r = 0; r < NUM_GUESSES; r++){
-    //     for (int c = 0; c < NUM_LETTERS; c++){
-    //         Vector2 position = { .x = c, .y = r };
-    //         InitLetterCellAt(&cells[r][c], position, gameState);
-    //     }
-    // }
 
     // ToDo: Actually use cell params to make keyb
     Keyboard *keyb = CreateKeyboard(
-        gameState->keybPosY, 
-        (Vector2) {gameState->keybCellSize, gameState->keybCellSize}, 
-        gameState->keybFontSize, 
-        gameState->keybPadding, 
+        gameState,
         LIGHTGRAY, 
         YELLOW
     );
@@ -133,11 +120,13 @@ int main(){
                 case GAMEPLAY:
                 {
                     DrawMainGameplayScreen(gameGrid, keyb, gameState);
+                    settingsIcon->draw(settingsIcon, gameState); // ToDo: Struct for gameplay icons
                     ProcessNotifications(&notificationManager, gameGrid, gameState);
                 } break;
                 case WIN:
                 {
                     DrawMainGameplayScreen(gameGrid, keyb, gameState);
+                    settingsIcon->draw(settingsIcon, gameState); // ToDo: Struct for gameplay icons
                     
                     DrawText("WELL DONE!", (GetScreenWidth() - MeasureText("WELL DONE!", gameState->endTextSize))/2, gameState->endTextOffsetY, gameState->endTextSize, DARKGREEN);
                     if((gameState->framesCounter/30)%2 == 0){
@@ -148,6 +137,7 @@ int main(){
                 case LOSE:
                 {
                     DrawMainGameplayScreen(gameGrid, keyb, gameState);
+                    settingsIcon->draw(settingsIcon, gameState); // ToDo: Struct for gameplay icons
                     const char* endMessage = TextFormat("SO CLOSE! IT WAS %s.", gameState->targetWord);
                     DrawText(endMessage, (GetScreenWidth() - MeasureText(endMessage, gameState->endTextSize))/2, gameState->endTextOffsetY, gameState->endTextSize, DARKPURPLE);
                     if((gameState->framesCounter/30)%2 == 0){
@@ -158,11 +148,11 @@ int main(){
                 case SETTINGS:
                 {
                     DrawMainGameplayScreen(gameGrid, keyb, gameState);
+                    settingsIcon->draw(settingsIcon, gameState); // ToDo: Struct for gameplay icons
                     DrawSettingsScreen();
                 }
                 default: break;
             }
-            settingsIcon->draw(settingsIcon, gameState);
         EndDrawing();
         // ------------------------------------------------------------
     }
