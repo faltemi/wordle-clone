@@ -25,11 +25,11 @@ set(SOURCES
     src/icon.c
     src/inputProcessing.c
     src/main.c
-    src/settings.c
     src/wordList.c
     components/src/gameGrid.c
     components/src/keyboard.c
     components/src/notificationManager.c
+    components/src/settingsPanel.c
     icons/src/letterIcon.c
     icons/src/settingsIcon.c
 )

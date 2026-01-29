@@ -1,4 +1,4 @@
-#include "settings.h"
+#include "settingsPanel.h"
 #include <math.h>
 
 void DrawSettingsScreen(){
