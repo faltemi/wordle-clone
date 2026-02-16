@@ -35,7 +35,7 @@ void DrawLetterIconWithSkew(LetterIcon *l, GameState *g){
         {
             border = true;
             borderColor = g->theme->normalBorder;
-            letterIconColor = g->theme->normalFont;
+            letterIconColor = g->theme->noGuessBackground;
         } break;
         case WRONG_POS:
         {
