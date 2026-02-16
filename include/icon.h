@@ -23,7 +23,7 @@ typedef struct Icon {
     IconType type;
     Rectangle bounds; // Used for drawing contents relative to bounding range
     void (*draw)(Icon *, GameState *);
-    void (*onClick)(GameState *);
+    void (*onClick)(GameState *); // ToDo: Instead of handling click event, have enum to determine the event
     union{
         SettingsIcon *settings;
         LetterIcon *letterIcon;

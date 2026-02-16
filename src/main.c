@@ -6,7 +6,7 @@
 #include "globals.h"
 #include "wordList.h"
 #include "notificationManager.h"
-#include "settings.h"
+#include "settingsPanel.h"
 #include "icon.h"
 #include "gameState.h"
 #include "gameGrid.h"
@@ -91,7 +91,7 @@ int main(){
             } break;
             case SETTINGS:
             {
-                // ToDo: Settings screen input processor
+                ProcessSettingsInput(gameState);
             } break;
             default: break;
         }
