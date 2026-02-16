@@ -3,7 +3,6 @@
 
 #include "raylib.h"
 #include "wordList.h"
-#include "settingsState.h"
 #include "theme.h"
 #include <string.h>
 
@@ -60,8 +59,6 @@ typedef struct GameState {
 
     GameScreen gameScreen;
     int framesCounter;
-
-    SettingsState *settings;
 } GameState;
 
 GameState *MakeDefaultGameState();

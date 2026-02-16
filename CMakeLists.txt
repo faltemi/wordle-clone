@@ -33,8 +33,8 @@ set(SOURCES
     icons/src/closePanelIcon.c
     icons/src/letterIcon.c
     icons/src/settingsIcon.c
+    icons/src/themeIcon.c
     state/src/gameState.c
-    state/src/settingsState.c
 )
 
 add_executable(wordle ${SOURCES})

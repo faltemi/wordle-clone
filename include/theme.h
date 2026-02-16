@@ -45,6 +45,9 @@ typedef struct Theme {
     // Close panel icon
     Color closePanelBackground;
     Color closePanelSpokes;
+    // Theme icon
+    Color themeIconBackground;
+    Color themeIconText;
 
 } Theme;
 

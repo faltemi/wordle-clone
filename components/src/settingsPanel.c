@@ -20,6 +20,14 @@ SettingsPanel *MakeSettingsPanel(GameState *g){
     };
     p->closeButton = MakeIcon(ICON_CLOSE, closeBtnBounds, g);
 
+    // Theme selector in center of panel
+    Rectangle themeBounds = {
+        p->panelBounds.x + (p->panelBounds.width - 120) / 2,  // Center horizontally (120px wide)
+        p->panelBounds.y + (p->panelBounds.height - 50) / 2,  // Center vertically (50px tall)
+        120, 50
+    };
+    p->themeSelector = MakeIcon(ICON_THEME, themeBounds, g);
+
     p->roundness = 0.1f;
 
     return p;
@@ -27,6 +35,7 @@ SettingsPanel *MakeSettingsPanel(GameState *g){
 
 void FreeSettingsPanel(SettingsPanel *p){
     FreeIcon(p->closeButton);
+    FreeIcon(p->themeSelector);
     free(p);
 }
 
@@ -43,6 +52,9 @@ void DrawSettingsScreen(SettingsPanel *panel, GameState *g){
     // Close button (X in top-right)
     panel->closeButton->draw(panel->closeButton, g);
 
+    // Theme selector in center
+    panel->themeSelector->draw(panel->themeSelector, g);
+
     // ToDo: Setting rows with toggle switches
 
 }
@@ -58,8 +70,9 @@ void ProcessSettingsInput(SettingsPanel *panel, GameState *state){
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), panel->closeButton->bounds)) {
         panel->closeButton->onClick(state);
     }
-}
 
-void ToggleSetting(SettingsState *settings, int settingIdx){
-
+    // Handle theme selector click
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), panel->themeSelector->bounds)) {
+        panel->themeSelector->onClick(state);
+    }
 }

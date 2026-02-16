@@ -40,6 +40,9 @@ static void DayTheme(Theme *t){
     // Close panel icon
     t->closePanelBackground = RAYWHITE;
     t->closePanelSpokes = GRAY;
+    // Theme icon
+    t->themeIconBackground = RAYWHITE;
+    t->themeIconText = BLACK;
 }
 
 static void NightTheme(Theme *t){
@@ -78,6 +81,9 @@ static void NightTheme(Theme *t){
     // Close panel icon
     t->closePanelBackground = (Color){ 18, 18, 19, 255 };
     t->closePanelSpokes = (Color){ 129, 131, 132, 255 };
+    // Theme icon
+    t->themeIconBackground = (Color){ 18, 18, 19, 255 };
+    t->themeIconText = RAYWHITE;
 }
 
 Theme *MakeTheme(){
