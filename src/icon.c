@@ -34,6 +34,15 @@ static void MakeKeyboardLetter(Icon *i, Rectangle bounds, GameState *g){
     // ToDo: Add on click
 }
 
+static void MakeThemeToggleIcon(Icon *i, Rectangle bounds, GameState *g){
+    (void)g;
+    i->type = ICON_THEME;
+    i->bounds = bounds;
+    i->data.themeIcon = MakeThemeIcon(bounds);
+    i->onClick = &ClickThemeIcon;
+    i->draw = &DrawThemeIcon;
+}
+
 // Icon factory
 Icon *MakeIcon(IconType type, Rectangle bounds, GameState *g){
     Icon *i = malloc(sizeof(Icon));
@@ -41,14 +50,17 @@ Icon *MakeIcon(IconType type, Rectangle bounds, GameState *g){
         case ICON_CLOSE:
             MakePanelClose(i, bounds, g);
             break;
-        case ICON_SETTINGS:
-            MakeSettings(i, bounds, g);
+        case ICON_KEYB_LETTER:
+            MakeKeyboardLetter(i, bounds, g);
             break;
         case ICON_LETTER:
             MakeLetter(i, bounds, g);
             break;
-        case ICON_KEYB_LETTER:
-            MakeKeyboardLetter(i, bounds, g);
+        case ICON_SETTINGS:
+            MakeSettings(i, bounds, g);
+            break;
+        case ICON_THEME:
+            MakeThemeToggleIcon(i, bounds, g);
             break;
         default: break;
     }
@@ -72,6 +84,10 @@ void FreeIcon(Icon *i){
         case ICON_LETTER:
         {
             free(i->data.letterIcon);
+        } break;
+        case ICON_THEME:
+        {
+            free(i->data.themeIcon);
         } break;
         default: break;
     }

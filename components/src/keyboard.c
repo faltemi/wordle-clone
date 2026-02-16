@@ -88,14 +88,12 @@ void FillRow(Keyboard *k, KeyboardRow row, GameState *g){
     k->keys[row] = curRow;
 }
 
-Keyboard *CreateKeyboard(GameState *g, Color primary, Color secondary){
+Keyboard *CreateKeyboard(GameState *g){
     Keyboard *k = malloc(sizeof(Keyboard));
     k->positionY = g->keybPosY;
     k->fontSize = g->keybFontSize;
     k->keySize = (Vector2) {g->keybCellSize, g->keybCellSize};
     k->keyPadding = g->keybPadding;
-    k->primaryC = primary;
-    k->secondaryC = secondary;
     FillRow(k, TOP, g);
     FillRow(k, MIDDLE, g);
     FillRow(k, BOTTOM, g);

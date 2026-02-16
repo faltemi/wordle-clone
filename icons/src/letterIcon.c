@@ -26,49 +26,42 @@ void DrawLetterIcon(Icon *i, GameState *g){
 
 void DrawLetterIconWithSkew(LetterIcon *l, GameState *g){
     bool border = false;
-    Color borderColor = LIGHTGRAY;
-    Color letterIconColor = RAYWHITE;
-    Color fontColor = RAYWHITE;
+    Color borderColor = g->theme->normalBorder;
+    Color letterIconColor = g->theme->noGuessBackground;
+    Color fontColor = g->theme->normalFont;
     int borderSize = 0;
     switch(l->state){
         case NO_GUESS:
         {
             border = true;
-            borderColor = LIGHTGRAY;
-            letterIconColor = RAYWHITE;
+            borderColor = g->theme->normalBorder;
+            letterIconColor = g->theme->noGuessBackground;
         } break;
         case WRONG_POS:
         {
             border = false;
-            letterIconColor = YELLOW;
-            fontColor = RAYWHITE;
+            letterIconColor = g->theme->wrongPosBackground;
+            fontColor = g->theme->normalFont;
         } break;
         case CORRECT:
         {
             border = false;
-            letterIconColor = GREEN;
-            fontColor = RAYWHITE;
+            letterIconColor = g->theme->correctBackground;
+            fontColor = g->theme->normalFont;
         } break;
         case INCORRECT:
         {
             border = false;
-            letterIconColor = DARKGRAY;
-            fontColor = RAYWHITE;
+            letterIconColor = g->theme->incorrectBackground;
+            fontColor = g->theme->normalFont;
         } break;
         case BEING_GUESSED:
         {
             border = true;
-            borderColor = DARKGRAY;
-            letterIconColor = RAYWHITE;
-            fontColor = BLACK;
+            borderColor = g->theme->beingGuessedBorder;
+            letterIconColor = g->theme->beingGuessedBackground;
+            fontColor = g->theme->beingGuessedFont;
         } break;
-        // case KEYBOARD:
-        // {
-        //     border = true;
-        //     borderColor = DARKGRAY;
-        //     letterIconColor = RAYWHITE;
-        //     fontColor = BLACK;
-        // } break;
         default: break;
     }
 

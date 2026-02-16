@@ -22,13 +22,11 @@ typedef struct Keyboard {
     Vector2 keySize;
     int fontSize;
     int keyPadding;
-    Color primaryC;
-    Color secondaryC;
     Icon **keys[NUM_ROWS];
 
 } Keyboard;
 
-Keyboard *CreateKeyboard(GameState *g, Color primary, Color secondary);
+Keyboard *CreateKeyboard(GameState *g);
 void ProcessKeyClick(GameGrid *gameGrid, Keyboard *keyb, NotificationManager* notifMgr, GameState *g);
 void DrawKeyboard(Keyboard *k, GameState *g);
 void ReleaseKeyboard(Keyboard *k);

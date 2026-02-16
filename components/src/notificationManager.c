@@ -57,7 +57,7 @@ int DrawNotifications(NotificationManager *notifMgr, GameState *g) {
         g->notifFontSize * 2
     };
 
-    DrawRectangleRec(rec, Fade(BLACK, alpha));
-    DrawText(text, rec.x + g->notifPadding, rec.y + 10, g->notifFontSize, Fade(RAYWHITE, alpha));
+    DrawRectangleRec(rec, Fade(g->theme->notifBackground, alpha));
+    DrawText(text, rec.x + g->notifPadding, rec.y + 10, g->notifFontSize, Fade(g->theme->notifFont, alpha));
     return 1;
 }

@@ -17,15 +17,15 @@ void DrawSettingsIcon(Icon *i, GameState *g){
     (void) g;
     SettingsIcon *s = i->data.settings;
     // Bounds
-    DrawRectangleRec(s->bounds, RAYWHITE);
+    DrawRectangleRec(s->bounds, g->theme->settingsIconBackground);
     // Spokes
-    DrawRectanglePro(s->spoke, s->spokeCenter, s->spokeAngle, GRAY);
-    DrawRectanglePro(s->spoke, s->spokeCenter, -s->spokeAngle, GRAY);
-    DrawRectanglePro(s->spoke, s->spokeCenter, 0, GRAY);
+    DrawRectanglePro(s->spoke, s->spokeCenter, s->spokeAngle, g->theme->settingsIconGear);
+    DrawRectanglePro(s->spoke, s->spokeCenter, -s->spokeAngle, g->theme->settingsIconGear);
+    DrawRectanglePro(s->spoke, s->spokeCenter, 0, g->theme->settingsIconGear);
     // Outer circle
-    DrawCircle((int)s->center.x, (int)s->center.y, s->spokeLength*0.4, GRAY);
+    DrawCircle((int)s->center.x, (int)s->center.y, s->spokeLength*0.4, g->theme->settingsIconGear);
     // Inner circle
-    DrawCircle((int)s->center.x, (int)s->center.y, s->spokeLength*0.2, RAYWHITE);
+    DrawCircle((int)s->center.x, (int)s->center.y, s->spokeLength*0.2, g->theme->settingsIconGearInner);
 }
 
 void ClickSettingsIcon(GameState *g){

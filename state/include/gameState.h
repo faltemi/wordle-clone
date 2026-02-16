@@ -3,13 +3,14 @@
 
 #include "raylib.h"
 #include "wordList.h"
-#include "settingsState.h"
+#include "theme.h"
 #include <string.h>
 
 typedef enum GameScreen { LOGO, TITLE, GAMEPLAY, GUESSING, LOSE, WIN, SETTINGS } GameScreen;
 
 // Extendable to read from save and include winstreak, etc.
 typedef struct GameState {
+    Theme *theme;
     // Game window
     int screenHeight;
     int screenWidth;
@@ -58,8 +59,6 @@ typedef struct GameState {
 
     GameScreen gameScreen;
     int framesCounter;
-
-    SettingsState *settings;
 } GameState;
 
 GameState *MakeDefaultGameState();
