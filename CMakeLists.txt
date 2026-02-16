@@ -29,6 +29,7 @@ set(SOURCES
     components/src/keyboard.c
     components/src/notificationManager.c
     components/src/settingsPanel.c
+    icons/src/closePanelIcon.c
     icons/src/letterIcon.c
     icons/src/settingsIcon.c
     state/src/gameState.c

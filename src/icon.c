@@ -9,6 +9,15 @@ static void MakeSettings(Icon *i, Rectangle bounds, GameState *g){
     i->draw = &DrawSettingsIcon;
 }
 
+static void MakePanelClose(Icon *i, Rectangle bounds, GameState *g){
+    (void)g;
+    i->type = ICON_CLOSE;
+    i->bounds = bounds;
+    i->data.closePanel = MakeClosePanelIcon(bounds);
+    i->onClick = &ClickClosePanelIcon;
+    i->draw = &DrawClosePanelIcon;
+}
+
 static void MakeLetter(Icon *i, Rectangle bounds, GameState *g){
     i->type = ICON_LETTER;
     i->bounds = bounds;
@@ -29,6 +38,9 @@ static void MakeKeyboardLetter(Icon *i, Rectangle bounds, GameState *g){
 Icon *MakeIcon(IconType type, Rectangle bounds, GameState *g){
     Icon *i = malloc(sizeof(Icon));
     switch(type){
+        case ICON_CLOSE:
+            MakePanelClose(i, bounds, g);
+            break;
         case ICON_SETTINGS:
             MakeSettings(i, bounds, g);
             break;
@@ -48,6 +60,10 @@ Icon *MakeIcon(IconType type, Rectangle bounds, GameState *g){
 
 void FreeIcon(Icon *i){
     switch(i->type){
+        case ICON_CLOSE:
+        {
+            free(i->data.closePanel);
+        } break;
         case ICON_SETTINGS:
         {
             free(i->data.settings);

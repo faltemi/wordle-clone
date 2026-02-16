@@ -1,10 +1,11 @@
 #ifndef ICON_H
 #define ICON_H
 
+#include "closePanelIcon.h"
+#include "gameState.h"
+#include "letterIcon.h"
 #include "raylib.h"
 #include "settingsIcon.h"
-#include "letterIcon.h"
-#include "gameState.h"
 #include <stdlib.h>
 
 // Forward declaration for self reference in draw method
@@ -27,6 +28,7 @@ typedef struct Icon {
     union{
         SettingsIcon *settings;
         LetterIcon *letterIcon;
+        ClosePanelIcon *closePanel;
     } data;
 } Icon;
 

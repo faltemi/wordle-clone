@@ -38,9 +38,11 @@ int main(){
     // ToDo: Actually use cell params to make keyb
     Keyboard *keyb = CreateKeyboard(
         gameState,
-        LIGHTGRAY, 
+        LIGHTGRAY,
         YELLOW
     );
+
+    SettingsPanel *settingsPanel = MakeSettingsPanel(gameState);
 
     // Desired framerate
     SetTargetFPS(60);
@@ -91,7 +93,7 @@ int main(){
             } break;
             case SETTINGS:
             {
-                ProcessSettingsInput(gameState);
+                ProcessSettingsInput(settingsPanel, gameState);
             } break;
             default: break;
         }
@@ -149,7 +151,7 @@ int main(){
                 {
                     DrawMainGameplayScreen(gameGrid, keyb, gameState);
                     settingsIcon->draw(settingsIcon, gameState); // ToDo: Struct for gameplay icons
-                    DrawSettingsScreen();
+                    DrawSettingsScreen(settingsPanel, gameState);
                 }
                 default: break;
             }
@@ -163,6 +165,7 @@ int main(){
     CloseWindow();
     ReleaseKeyboard(keyb);
     FreeGameGrid(gameGrid);
+    FreeSettingsPanel(settingsPanel);
     FreeIcon(settingsIcon);
     FreeGameState(gameState);
     // ----------------------------------------------------------------

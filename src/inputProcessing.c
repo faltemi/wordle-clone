@@ -52,7 +52,7 @@ void ProcessMouseInputs(GameGrid *gameGrid, Keyboard *keyb, NotificationManager*
     ProcessKeyClick(gameGrid, keyb, notifMgr, g);
     // Check for clicked settings icon
     // ToDo: POLISH: For draw check collision point and change color of bounds
-    if(CheckCollisionPointRec(GetMousePosition(), s->bounds) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+    if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), s->bounds)){
         s->onClick(g);
     }
 }
