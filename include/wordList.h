@@ -11,8 +11,8 @@ typedef struct WordList {
     int wordCount;
 } WordList;
 
-WordList LoadWordList(const char *fileName);
-const char* GetRandomWord(WordList *list);
+WordList *LoadWordList(const char *fileName);
+const char *GetRandomWord(WordList *list);
 bool IsValidWord(WordList *list, const char *guess);
 void FreeWordList(WordList *list);
 

@@ -2,13 +2,16 @@
 #define INPUTPROCESSING_H
 
 #include "raylib.h"
-#include "cell.h"
 #include "keyboard.h"
 #include "globals.h"
 #include "wordList.h"
-#include "notification.h"
+#include "notificationManager.h"
+#include "gameState.h"
+#include "gameGrid.h"
+#include "icon.h"
 
-void ProcessKeyboardInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameScreen *screen, int guessRowIdx, int *guessLetterIdx, NotificationManager* notifMgr);
-void ProcessMouseInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, GameScreen *screen, int guessRowIdx, int *guessLetterIdx, NotificationManager* notifMgr);
-
+void ProcessKeyboardInputs(GameGrid *gameGrid, NotificationManager *notifMgr, GameState *g);
+void GuessWord(GameGrid *gameGrid, NotificationManager* notifMgr, GameState *g);
+void ProcessMouseInputs(GameGrid *gameGrid, Keyboard *keyb, NotificationManager *notifMgr, Icon *s, GameState *g);
+// Process settings inputs MOUSE ONLY
 #endif // INPUTPROCESSING_H

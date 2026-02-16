@@ -1,5 +1,7 @@
-#ifndef NOTIFICATION_H
-#define NOTIFICATION_H
+#ifndef NOTIFICATION_MANAGER_H
+#define NOTIFICATION_MANAGER_H
+
+#include "gameState.h"
 
 typedef enum Notification {
     NOTIFY_NONE,
@@ -18,6 +20,6 @@ void SetNotification(NotificationManager *notifMgr, Notification n);
 
 void UpdateNotification(NotificationManager *notifMgr, float dt);
 
-int DrawNotifications(NotificationManager *notifMgr);
+int DrawNotifications(NotificationManager *notifMgr, GameState *g);
 
-#endif // NOTIFICATION_H
+#endif // NOTIFICATION_MANAGER_H

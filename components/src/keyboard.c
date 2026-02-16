@@ -1,4 +1,5 @@
 #include "keyboard.h"
+#include "inputProcessing.h"
 
 static const char *topRowKeys[NUM_ROW_KEYS+1] = {
     [0] = "Q",
@@ -55,50 +56,70 @@ static const char **GetKeyMapArray(KeyboardRow row){
     }
 }
 
-static void DrawRow(Keyboard *k, KeyboardRow row){
+static void DrawRow(Keyboard *k, KeyboardRow row, GameState *g){
     int num_keys = NUM_ROW_KEYS + (row == TOP ? TOP_ROW_MOD : 0);
     
     for(int i = 0; i < num_keys; ++i){
-        DrawLetterCell(k->keys[row][i]);
+        k->keys[row][i]->draw(k->keys[row][i], g);
     }
 }
 
-void DrawKeyboard(Keyboard *k){
-    DrawRow(k, TOP);
-    DrawRow(k, MIDDLE);
-    DrawRow(k, BOTTOM);
+void DrawKeyboard(Keyboard *k, GameState *g){
+    DrawRow(k, TOP, g);
+    DrawRow(k, MIDDLE, g);
+    DrawRow(k, BOTTOM, g);
 }
 
-void FillRow(Keyboard *k, KeyboardRow row){
+void FillRow(Keyboard *k, KeyboardRow row, GameState *g){
     int num_keys = NUM_ROW_KEYS + (row == TOP ? TOP_ROW_MOD : 0);
-    LetterCell **curRow = malloc(num_keys * sizeof(LetterCell*));
+    Icon **curRow = malloc(num_keys * sizeof(Icon*));
     
     const char **row_key_map = GetKeyMapArray(row);
     const int offsetX = (GetScreenWidth() - (num_keys*k->keySize.x + k->keyPadding*(num_keys-1)))/2;
     const int padY = row == 0 ? 0 : k->keyPadding;
     for(int i = 0; i < num_keys; ++i){
-        LetterCell *newCell = malloc(sizeof(LetterCell));
         Vector2 cellPos = {i*(k->keySize.x + (i == 0 ? 0 : k->keyPadding)) + offsetX, (int)row*(k->keySize.y + padY) + k->positionY};
-        InitLetterCell(newCell, cellPos, k->keySize, k->fontSize);
-        TextCopy(newCell->letter, row_key_map[i]);
-        newCell->state = KEYBOARD;
+        Rectangle bounds = {cellPos.x, cellPos.y, k->keySize.x, k->keySize.y};
+        Icon *newCell = MakeIcon(ICON_KEYB_LETTER, bounds, g);
+        TextCopy(newCell->data.letterIcon->letter, row_key_map[i]);
+        newCell->data.letterIcon->state = BEING_GUESSED;
         curRow[i] = newCell;
     }
     k->keys[row] = curRow;
 }
 
-Keyboard *CreateKeyboard(float postionY, Vector2 keySize, int fontSize, int keyPadding, Color primary, Color secondary){
+Keyboard *CreateKeyboard(GameState *g, Color primary, Color secondary){
     Keyboard *k = malloc(sizeof(Keyboard));
-    k->positionY = postionY;
-    k->fontSize = fontSize;
-    k->keySize = keySize;
-    k->keyPadding = keyPadding;
+    k->positionY = g->keybPosY;
+    k->fontSize = g->keybFontSize;
+    k->keySize = (Vector2) {g->keybCellSize, g->keybCellSize};
+    k->keyPadding = g->keybPadding;
     k->primaryC = primary;
     k->secondaryC = secondary;
-    FillRow(k, TOP);
-    FillRow(k, MIDDLE);
-    FillRow(k, BOTTOM);
+    FillRow(k, TOP, g);
+    FillRow(k, MIDDLE, g);
+    FillRow(k, BOTTOM, g);
     return k;
+}
+
+void ProcessKeyClick(GameGrid *gameGrid, Keyboard *keyb, NotificationManager* notifMgr, GameState *g){
+    for(int i = 0; i < NUM_ROWS; ++i){
+        int num_keys = NUM_ROW_KEYS + (i == 0 ? 1 : 0);
+        for(int j = 0; j < num_keys; ++j){
+            if(CheckCollisionPointRec(GetMousePosition(),keyb->keys[i][j]->bounds) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
+                // Key press logic: letter, enter, del
+                if(strcmp(keyb->keys[i][j]->data.letterIcon->letter, g->enterKey) == 0){
+                    GuessWord(gameGrid, notifMgr, g);
+                }
+                else if(strcmp(keyb->keys[i][j]->data.letterIcon->letter, g->deleteKey) == 0){
+                    DeleteLetter(gameGrid, g);
+                }
+                else{
+                    AddLetter(gameGrid, keyb->keys[i][j]->data.letterIcon->letter[0], g);
+                }
+            }
+        }
+    }
 }
 
 static void FreeRow(Keyboard *k, KeyboardRow row){
@@ -107,7 +128,7 @@ static void FreeRow(Keyboard *k, KeyboardRow row){
     int num_keys = NUM_ROW_KEYS + (row == TOP ? TOP_ROW_MOD : 0);
 
     for(int i = 0; i < num_keys; ++i){
-        free(k->keys[row][i]);
+        FreeIcon(k->keys[row][i]);
     }
     free(k->keys[row]);
 }

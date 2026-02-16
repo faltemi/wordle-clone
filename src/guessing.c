@@ -1,33 +1,33 @@
 #include "guessing.h"
 
-void ProcessGuess(LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameScreen *screen, const char *targetWord, int *guessRowIdx, int *guessLetterIdx, int *guessingWordIndex, int *numCorrect){
-    if(*guessingWordIndex < NUM_LETTERS){
+void ProcessGuess(GameGrid *gameGrid, GameState *g){
+    if(g->guessingWordIdx < NUM_LETTERS){
         // Same letter
-        if(cells[*guessRowIdx][*guessingWordIndex].letter[0] == targetWord[*guessingWordIndex]){
-            cells[*guessRowIdx][*guessingWordIndex].state = CORRECT;
-            (*numCorrect)++;
+        if(gameGrid->letterIcons[g->guessRowIdx][g->guessingWordIdx]->data.letterIcon->letter[0] == g->targetWord[g->guessingWordIdx]){
+            gameGrid->letterIcons[g->guessRowIdx][g->guessingWordIdx]->data.letterIcon->state = CORRECT;
+            g->numLettersCorrect++;
         }
         else{
             bool letterInWord = false;
             for(int i = 0; i < NUM_LETTERS; ++i){
-                if(cells[*guessRowIdx][*guessingWordIndex].letter[0] == targetWord[i]){
+                if(gameGrid->letterIcons[g->guessRowIdx][g->guessingWordIdx]->data.letterIcon->letter[0] == g->targetWord[i]){
                     letterInWord = true;
                     break;
                 }
             }
-            cells[*guessRowIdx][*guessingWordIndex].state = letterInWord ? WRONG_POS : INCORRECT;
+            gameGrid->letterIcons[g->guessRowIdx][g->guessingWordIdx]->data.letterIcon->state = letterInWord ? WRONG_POS : INCORRECT;
         }
-        (*guessingWordIndex)++;
+        (g->guessingWordIdx)++;
     }
     else{
-        if(*numCorrect == NUM_LETTERS){
-            *screen = WIN;
+        if(g->numLettersCorrect == NUM_LETTERS){
+            g->gameScreen = WIN;
             return;
         }
-        *guessingWordIndex = 0;
-        (*numCorrect) = 0;
-        (*guessRowIdx)++;
-        *guessLetterIdx = 0;
-        *screen = *guessRowIdx == NUM_GUESSES ? LOSE : GAMEPLAY;
+        g->guessingWordIdx = 0;
+        g->numLettersCorrect = 0;
+        g->guessRowIdx++;
+        g->guessLetterIdx = 0;
+        g->gameScreen = g->guessRowIdx == NUM_GUESSES ? LOSE : GAMEPLAY;
     }
 }

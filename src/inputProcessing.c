@@ -1,36 +1,21 @@
 #include "inputProcessing.h"
+#include "gameGrid.h"
 
-static void DeleteLetter(LetterCell cells[NUM_GUESSES][NUM_LETTERS], int guessRowIdx, int *guessLetterIdx){
-    if(*guessLetterIdx != 0) (*guessLetterIdx)--;
-    cells[guessRowIdx][*guessLetterIdx].letter[0] = '\0';
-    cells[guessRowIdx][*guessLetterIdx].state = NO_GUESS;
-}
-
-static void AddLetter(LetterCell cells[NUM_GUESSES][NUM_LETTERS], char letter, int guessRowIdx, int *guessLetterIdx){
-    if (letter >= 'a' && letter <= 'z') letter -= 32;
-    if(*guessLetterIdx < NUM_LETTERS && letter >= 'A' && letter <= 'Z'){
-        cells[guessRowIdx][*guessLetterIdx].letter[0] = letter;
-        cells[guessRowIdx][*guessLetterIdx].letter[1] = '\0';
-        cells[guessRowIdx][*guessLetterIdx].state = BEING_GUESSED;
-        (*guessLetterIdx)++;
-    }
-}
-
-static void GetWord(LetterCell cells[NUM_GUESSES][NUM_LETTERS], int guessRowIdx, char *outputBuffer){
+static void GetWord(GameGrid *gameGrid, int guessRowIdx, char *outputBuffer){
     for(int i = 0; i < NUM_LETTERS; ++i){
-        outputBuffer[i] = cells[guessRowIdx][i].letter[0];
+        outputBuffer[i] = gameGrid->letterIcons[guessRowIdx][i]->data.letterIcon->letter[0];
     }
     outputBuffer[NUM_LETTERS] = '\0';
 }
 
-static void GuessWord(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], int guessRowIdx, int *guessLetterIdx, GameScreen *screen, NotificationManager* notifMgr){
-    if(*guessLetterIdx == NUM_LETTERS){
+void GuessWord(GameGrid *gameGrid, NotificationManager* notifMgr, GameState *g){
+    if(g->guessLetterIdx == NUM_LETTERS){
         char guessedWord[NUM_LETTERS+1];
-        GetWord(cells, guessRowIdx, guessedWord);
+        GetWord(gameGrid, g->guessRowIdx, guessedWord);
         
-        if(IsValidWord(wordList, guessedWord)){
+        if(IsValidWord(g->wordList, guessedWord)){
             // Change state to 'guessing', freeze input and guess each letter until done
-            *screen = GUESSING;
+            g->gameScreen = GUESSING;
         }
         else{
             // Need to display invalid word or something, get info out via flag?
@@ -43,41 +28,31 @@ static void GuessWord(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETT
     }
 }
 
-void ProcessKeyboardInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], GameScreen *screen, int guessRowIdx, int *guessLetterIdx, NotificationManager* notifMgr){
+void ProcessKeyboardInputs(GameGrid *gameGrid, NotificationManager* notifMgr, GameState *g){
     // Buffer of keys pressed until empty then 0
     int key = GetCharPressed();
     while(key > 0){
         if((key >= 32) && (key <= 125)){
-            AddLetter(cells, (char)key, guessRowIdx, guessLetterIdx);
+            AddLetter(gameGrid, (char)key, g);
         }
         key = GetCharPressed();
     }
     
     if (IsKeyPressed(KEY_ENTER)){
-        GuessWord(wordList, cells, guessRowIdx, guessLetterIdx, screen, notifMgr);
+        GuessWord(gameGrid, notifMgr, g);
     }
     else if (IsKeyPressed(KEY_BACKSPACE)){
-        DeleteLetter(cells, guessRowIdx, guessLetterIdx);
+        DeleteLetter(gameGrid, g);
     }
 }
 
-void ProcessMouseInputs(WordList *wordList, LetterCell cells[NUM_GUESSES][NUM_LETTERS], Keyboard *keyb, GameScreen *screen, int guessRowIdx, int *guessLetterIdx, NotificationManager* notifMgr){
+// ToDo: struct for interactables instead of expanding func sig
+void ProcessMouseInputs(GameGrid *gameGrid, Keyboard *keyb, NotificationManager* notifMgr, Icon *s, GameState *g){
     // Check for clicked keyboard key
-    for(int i = 0; i < NUM_ROWS; ++i){
-        int num_keys = NUM_ROW_KEYS + (i == 0 ? 1 : 0);
-        for(int j = 0; j < num_keys; ++j){
-            if(CheckCollisionPointRec(GetMousePosition(),keyb->keys[i][j]->bounds) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
-                // Key press logic: letter, enter, del
-                if(strcmp(keyb->keys[i][j]->letter, ENTER) == 0){
-                    GuessWord(wordList, cells, guessRowIdx, guessLetterIdx, screen, notifMgr);
-                }
-                else if(strcmp(keyb->keys[i][j]->letter, DELETE) == 0){
-                    DeleteLetter(cells, guessRowIdx, guessLetterIdx);
-                }
-                else{
-                    AddLetter(cells, keyb->keys[i][j]->letter[0], guessRowIdx, guessLetterIdx);
-                }
-            }
-        }
+    ProcessKeyClick(gameGrid, keyb, notifMgr, g);
+    // Check for clicked settings icon
+    // ToDo: POLISH: For draw check collision point and change color of bounds
+    if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), s->bounds)){
+        s->onClick(g);
     }
 }

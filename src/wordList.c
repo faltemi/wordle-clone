@@ -1,33 +1,34 @@
 #include "wordList.h"
+#include <stdlib.h>
 
-WordList LoadWordList(const char *fileName){
-    WordList list = {0};
+WordList *LoadWordList(const char *fileName){
+    WordList *list = malloc(sizeof(WordList));
     
-    list.fileBuffer = LoadFileText(fileName);
-    if (!list.fileBuffer) return list;
+    list->fileBuffer = LoadFileText(fileName);
+    if (!list->fileBuffer) return list;
 
     int count = 0;
-    for (int i = 0; list.fileBuffer[i]; i++) {
-        if (list.fileBuffer[i] == '\n') count++;
+    for (int i = 0; list->fileBuffer[i]; i++) {
+        if (list->fileBuffer[i] == '\n') count++;
     }
-    list.words = (const char **)malloc(sizeof(char*) * count);
-    list.wordCount = count;
+    list->words = (const char **)malloc(sizeof(char*) * count);
+    list->wordCount = count;
 
     int wordIdx = 0;
-    char *cursor = list.fileBuffer;
-    list.words[wordIdx++] = cursor;
+    char *cursor = list->fileBuffer;
+    list->words[wordIdx++] = cursor;
 
-    for (int i = 0; list.fileBuffer[i]; i++) {
-        if (list.fileBuffer[i] == '\n') {
-            list.fileBuffer[i] = '\0'; // Terminate current word
+    for (int i = 0; list->fileBuffer[i]; i++) {
+        if (list->fileBuffer[i] == '\n') {
+            list->fileBuffer[i] = '\0'; // Terminate current word
             
             // If there is more text, point to the next word
-            if (list.fileBuffer[i+1] != '\0') {
-                list.words[wordIdx++] = &list.fileBuffer[i+1];
+            if (list->fileBuffer[i+1] != '\0') {
+                list->words[wordIdx++] = &list->fileBuffer[i+1];
             }
         }
         // Handle Windows \r\n line endings
-        if (list.fileBuffer[i] == '\r') list.fileBuffer[i] = '\0';
+        if (list->fileBuffer[i] == '\r') list->fileBuffer[i] = '\0';
     }
 
     return list;
@@ -55,5 +56,5 @@ bool IsValidWord(WordList *list, const char *guess) {
 void FreeWordList(WordList *list) {
     if (list->words) free(list->words);
     if (list->fileBuffer) UnloadFileText(list->fileBuffer);
-    list->wordCount = 0;
+    free(list);
 }
