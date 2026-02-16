@@ -30,18 +30,18 @@ void FreeSettingsPanel(SettingsPanel *p){
     free(p);
 }
 
-void DrawSettingsScreen(SettingsPanel *panel, GameState *state){
+void DrawSettingsScreen(SettingsPanel *panel, GameState *g){
     // Fade background overlay
-    DrawRectangle(0, 0, state->screenWidth, state->screenHeight, Fade(BLACK, 0.5f));
+    DrawRectangle(0, 0, g->screenWidth, g->screenHeight, Fade(g->theme->settingsFade, 0.5f));
 
     // Main panel with rounded corners
-    DrawRectangleRounded(panel->panelBounds, panel->roundness, 10, WHITE);
+    DrawRectangleRounded(panel->panelBounds, panel->roundness, 10, g->theme->settingsBackground);
 
     // Title
-    DrawText("SETTINGS", panel->panelBounds.x + 20, panel->panelBounds.y + 20, 32, BLACK);
+    DrawText("SETTINGS", panel->panelBounds.x + 20, panel->panelBounds.y + 20, 32, g->theme->settingsText);
 
     // Close button (X in top-right)
-    panel->closeButton->draw(panel->closeButton, state);
+    panel->closeButton->draw(panel->closeButton, g);
 
     // ToDo: Setting rows with toggle switches
 

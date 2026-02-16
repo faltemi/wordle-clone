@@ -24,6 +24,7 @@ set(SOURCES
     src/icon.c
     src/inputProcessing.c
     src/main.c
+    src/theme.c
     src/wordList.c
     components/src/gameGrid.c
     components/src/keyboard.c

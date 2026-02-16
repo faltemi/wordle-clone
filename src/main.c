@@ -36,11 +36,7 @@ int main(){
     GameGrid *gameGrid = MakeGameGrid(gameState);
 
     // ToDo: Actually use cell params to make keyb
-    Keyboard *keyb = CreateKeyboard(
-        gameState,
-        LIGHTGRAY,
-        YELLOW
-    );
+    Keyboard *keyb = CreateKeyboard(gameState);
 
     SettingsPanel *settingsPanel = MakeSettingsPanel(gameState);
 
@@ -54,14 +50,6 @@ int main(){
         // ------------------------------------------------------------
         gameState->framesCounter++;
         switch (gameState->gameScreen){
-            case LOGO:
-            {
-                // After 3 seconds, change to title screen
-                if(gameState->framesCounter > 180){
-                    gameState->gameScreen = TITLE;
-                    gameState->framesCounter = 0;
-                }
-            } break;
             case TITLE:
             {
                 if (IsKeyPressed(KEY_ENTER)) gameState->gameScreen = GAMEPLAY;
@@ -103,20 +91,15 @@ int main(){
         // Draw
         // ------------------------------------------------------------
         BeginDrawing();
-            ClearBackground(RAYWHITE);
+            ClearBackground(gameState->theme->mainBackground);
             switch(gameState->gameScreen){
-                case LOGO:
-                {
-                    DrawText("LOGO SCREEN", 20, 20, 20, DARKBLUE);
-                    DrawText("WAIT for 3 seconds...", 290, 220, 20, GRAY);
-                } break;
                 case TITLE:
                 {
-                    DrawRectangle(0, 0, gameState->screenWidth, gameState->screenHeight, DARKBROWN);
-                    DrawText("\"WORDLE\"", (GetScreenWidth() - MeasureText("\"WORDLE\"", 40))/2, GetScreenHeight()/2, 40, DARKGREEN);
+                    DrawRectangle(0, 0, gameState->screenWidth, gameState->screenHeight, gameState->theme->titleBackground);
+                    DrawText("\"WORDLE\"", (GetScreenWidth() - MeasureText("\"WORDLE\"", 40))/2, GetScreenHeight()/2, 40, gameState->theme->titleText);
                     // Every half second toggle text (60 fps)
                     if ((gameState->framesCounter/30)%2 == 0)
-                        DrawText("PRESS [ENTER] to START", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to START", 20)/2, GetScreenHeight()/2 + 60, 20, DARKGRAY);
+                        DrawText("PRESS [ENTER] to START", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to START", 20)/2, GetScreenHeight()/2 + 60, 20, gameState->theme->subText);
                 } break;
                 case GUESSING:
                 case GAMEPLAY:
@@ -130,9 +113,9 @@ int main(){
                     DrawMainGameplayScreen(gameGrid, keyb, gameState);
                     settingsIcon->draw(settingsIcon, gameState); // ToDo: Struct for gameplay icons
                     
-                    DrawText("WELL DONE!", (GetScreenWidth() - MeasureText("WELL DONE!", gameState->endTextSize))/2, gameState->endTextOffsetY, gameState->endTextSize, DARKGREEN);
+                    DrawText("WELL DONE!", (GetScreenWidth() - MeasureText("WELL DONE!", gameState->endTextSize))/2, gameState->endTextOffsetY, gameState->endTextSize, gameState->theme->winText);
                     if((gameState->framesCounter/30)%2 == 0){
-                        DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + gameState->restartOffsetY, gameState->restartTextSize, DARKGRAY);
+                        DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + gameState->restartOffsetY, gameState->restartTextSize, gameState->theme->subText);
                     }
                     ProcessNotifications(&notificationManager, gameGrid, gameState);
                 } break;
@@ -141,9 +124,9 @@ int main(){
                     DrawMainGameplayScreen(gameGrid, keyb, gameState);
                     settingsIcon->draw(settingsIcon, gameState); // ToDo: Struct for gameplay icons
                     const char* endMessage = TextFormat("SO CLOSE! IT WAS %s.", gameState->targetWord);
-                    DrawText(endMessage, (GetScreenWidth() - MeasureText(endMessage, gameState->endTextSize))/2, gameState->endTextOffsetY, gameState->endTextSize, DARKPURPLE);
+                    DrawText(endMessage, (GetScreenWidth() - MeasureText(endMessage, gameState->endTextSize))/2, gameState->endTextOffsetY, gameState->endTextSize, gameState->theme->loseText);
                     if((gameState->framesCounter/30)%2 == 0){
-                        DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + gameState->restartOffsetY, gameState->restartTextSize, DARKGRAY);
+                        DrawText("PRESS [ENTER] to try a new word.", GetScreenWidth()/2 - MeasureText("PRESS [ENTER] to try a new word.", 20)/2, GetScreenHeight()/2 + gameState->restartOffsetY, gameState->restartTextSize, gameState->theme->subText);
                     }
                     ProcessNotifications(&notificationManager, gameGrid, gameState);
                 } break;

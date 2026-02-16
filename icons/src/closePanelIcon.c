@@ -17,10 +17,10 @@ void DrawClosePanelIcon(Icon *i, GameState *g){
     (void) g;
     ClosePanelIcon *c = i->data.closePanel;
     // Bounds
-    DrawRectangleRec(c->bounds, RAYWHITE);
+    DrawRectangleRec(c->bounds, g->theme->closePanelBackground);
     // Spokes
-    DrawRectanglePro(c->spoke, c->spokeCenter, c->spokeAngle, GRAY);
-    DrawRectanglePro(c->spoke, c->spokeCenter, -c->spokeAngle, GRAY);
+    DrawRectanglePro(c->spoke, c->spokeCenter, c->spokeAngle, g->theme->closePanelSpokes);
+    DrawRectanglePro(c->spoke, c->spokeCenter, -c->spokeAngle, g->theme->closePanelSpokes);
 }
 
 void ClickClosePanelIcon(GameState *g){

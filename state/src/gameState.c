@@ -3,6 +3,7 @@
 
 GameState *MakeDefaultGameState(){
     GameState *g = malloc(sizeof(GameState));
+    g->theme = MakeTheme();
     g->screenHeight = 600;
     g->screenWidth = 800;
     g->windowTitle = "Wordle Clone";
@@ -60,5 +61,6 @@ void RestartGame(GameState *g){
 void FreeGameState(GameState *g){
     FreeWordList(g->wordList);
     FreeSettingsState(g->settings);
+    FreeTheme(g->theme);
     free(g);
 }
