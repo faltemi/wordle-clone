@@ -44,6 +44,9 @@ void ProcessKeyboardInputs(GameGrid *gameGrid, NotificationManager* notifMgr, Ga
     else if (IsKeyPressed(KEY_BACKSPACE)){
         DeleteLetter(gameGrid, g);
     }
+    else if (IsKeyPressed(KEY_ESCAPE)){
+        g->gameScreen = SETTINGS;
+    }
 }
 
 // ToDo: struct for interactables instead of expanding func sig

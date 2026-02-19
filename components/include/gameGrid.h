@@ -12,7 +12,7 @@ void AddLetter(GameGrid *gameGrid, char letter, GameState *g);
 void DeleteLetter(GameGrid *gameGrid, GameState *g);
 GameGrid *MakeGameGrid(GameState *g);
 void DrawGameGrid(GameGrid *grid, GameState *g);
-void ShakeRow(GameGrid *grid, GameState *g);
+void ShakeRow(GameGrid *grid, GameState *g, float shakeTimeRemaining);
 void ResetGrid(GameGrid *grid);
 void FreeGameGrid(GameGrid *grid);
 

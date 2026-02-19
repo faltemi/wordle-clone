@@ -23,6 +23,7 @@ void SetNotification(NotificationManager *notifMgr, Notification n){
     }
 }
 
+// Note that if row shake is longer than timer for notification, there will be issues
 void UpdateNotification(NotificationManager *notifMgr, float dt){
     if(notifMgr->timer_s > 0.0f){
         notifMgr->timer_s -= dt;
