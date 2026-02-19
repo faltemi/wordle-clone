@@ -1,5 +1,6 @@
 #include "gameGrid.h"
 #include <stdlib.h>
+#include <math.h>
 
 void DeleteLetter(GameGrid *gameGrid, GameState *g){
     if(g->guessLetterIdx != 0) (g->guessLetterIdx)--;
@@ -45,16 +46,13 @@ void DrawGameGrid(GameGrid *grid, GameState *g){
     }
 }
 
-void ShakeRow(GameGrid *grid, GameState *g){
-    static int shakeDir = -1;
-    // Slow down shaking ToDo: make smoother
-    if((g->framesCounter/45)%2 == 0){
-        for(int c = 0; c < NUM_LETTERS; ++c){
-            g->shakeSkew *= shakeDir;
-            DrawLetterIconWithSkew(grid->letterIcons[g->guessRowIdx][c]->data.letterIcon, g);
-        }
-        shakeDir *= -1;
+void ShakeRow(GameGrid *grid, GameState *g, float shakeTimeRemaining){
+    int savedSkew = g->shakeSkew;
+    g->shakeSkew = (int)(savedSkew * sinf(shakeTimeRemaining * 40.0f));
+    for(int c = 0; c < NUM_LETTERS; ++c){
+        DrawLetterIconWithSkew(grid->letterIcons[g->guessRowIdx][c]->data.letterIcon, g);
     }
+    g->shakeSkew = savedSkew;
 }
 
 void ResetGrid(GameGrid *grid){

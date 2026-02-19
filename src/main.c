@@ -15,7 +15,7 @@
 // ToDo: Consolidate into draw.c
 static inline void ProcessNotifications(NotificationManager *nMgr, GameGrid *grid, GameState *g){
     if(DrawNotifications(nMgr, g) && nMgr->rowShake_s > 0){
-        ShakeRow(grid, g);
+        ShakeRow(grid, g, nMgr->rowShake_s);
     }
 }
 
@@ -26,7 +26,7 @@ int main(){
     GameState *gameState = MakeDefaultGameState();
 
     InitWindow(gameState->screenWidth, gameState->screenHeight, gameState->windowTitle);
-    // NOTE: Load resources (textures, fonts, audio) after Window initialization
+    SetExitKey(KEY_NULL);
 
     // ToDo: Do these belong in game state?
     NotificationManager notificationManager;
