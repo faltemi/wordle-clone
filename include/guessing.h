@@ -6,6 +6,6 @@
 #include "gameGrid.h"
 #include "keyboard.h"
 
-void ProcessGuess(GameGrid *gameGrid, GameState *g);
+void ProcessGuess(GameGrid *gameGrid, GameState *g, Keyboard *k);
 
 #endif // GUESSING_H

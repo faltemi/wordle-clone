@@ -1,10 +1,12 @@
 #include "guessing.h"
 
-void ProcessGuess(GameGrid *gameGrid, GameState *g){
+void ProcessGuess(GameGrid *gameGrid, GameState *g, Keyboard *k){
     if(g->guessingWordIdx < NUM_LETTERS){
         // Same letter
+        // ToDo: Hide verbose calls with helper functions?
         if(gameGrid->letterIcons[g->guessRowIdx][g->guessingWordIdx]->data.letterIcon->letter[0] == g->targetWord[g->guessingWordIdx]){
             gameGrid->letterIcons[g->guessRowIdx][g->guessingWordIdx]->data.letterIcon->state = CORRECT;
+            AssignKeyState(k, gameGrid->letterIcons[g->guessRowIdx][g->guessingWordIdx]->data.letterIcon->letter[0], CORRECT);
             g->numLettersCorrect++;
         }
         else{
@@ -16,6 +18,7 @@ void ProcessGuess(GameGrid *gameGrid, GameState *g){
                 }
             }
             gameGrid->letterIcons[g->guessRowIdx][g->guessingWordIdx]->data.letterIcon->state = letterInWord ? WRONG_POS : INCORRECT;
+            AssignKeyState(k,gameGrid->letterIcons[g->guessRowIdx][g->guessingWordIdx]->data.letterIcon->letter[0], (letterInWord ? WRONG_POS : INCORRECT));
         }
         (g->guessingWordIdx)++;
     }

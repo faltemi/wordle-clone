@@ -62,7 +62,7 @@ int main(){
             } break;
             case GUESSING:
             {
-                ProcessGuess(gameGrid, gameState);
+                ProcessGuess(gameGrid, gameState, keyb);
                 UpdateNotification(&notificationManager, GetFrameTime());
             } break;
             case WIN:
@@ -74,6 +74,7 @@ int main(){
                     RestartGame(gameState);
 
                     // Reset keyboard
+                    ResetKeyboard(keyb);
 
                     // Reset cells
                     ResetGrid(gameGrid);
