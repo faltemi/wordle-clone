@@ -120,6 +120,31 @@ void ProcessKeyClick(GameGrid *gameGrid, Keyboard *keyb, NotificationManager* no
     }
 }
 
+void AssignKeyState(Keyboard *k, char letter, LetterState state){
+    // Inefficient, but small amount of keys so meh
+    for(int i = 0; i < NUM_ROWS; ++i){
+        int num_keys = NUM_ROW_KEYS + (i == 0 ? 1 : 0);
+        for(int j = 0; j < num_keys; ++j){
+            if(k->keys[i][j]->data.letterIcon->letter[0] == letter){
+                // This check prevents correct getting set to wrong pos (correct has highest precedent)
+                if(k->keys[i][j]->data.letterIcon->state != CORRECT){
+                    k->keys[i][j]->data.letterIcon->state = state;
+                }
+                return;
+            }
+        }
+    }
+}
+
+void ResetKeyboard(Keyboard *k){
+    for(int i = 0; i < NUM_ROWS; ++i){
+        int num_keys = NUM_ROW_KEYS + (i == 0 ? 1 : 0);
+        for(int j = 0; j < num_keys; ++j){
+            k->keys[i][j]->data.letterIcon->state = BEING_GUESSED;
+        }
+    }
+}
+
 static void FreeRow(Keyboard *k, KeyboardRow row){
     if(k->keys[row] == NULL) return;
 

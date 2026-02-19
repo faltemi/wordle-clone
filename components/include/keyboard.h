@@ -27,7 +27,9 @@ typedef struct Keyboard {
 } Keyboard;
 
 Keyboard *CreateKeyboard(GameState *g);
+void AssignKeyState(Keyboard *k, char letter, LetterState state);
 void ProcessKeyClick(GameGrid *gameGrid, Keyboard *keyb, NotificationManager* notifMgr, GameState *g);
+void ResetKeyboard(Keyboard *k);
 void DrawKeyboard(Keyboard *k, GameState *g);
 void ReleaseKeyboard(Keyboard *k);
 
