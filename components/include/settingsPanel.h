@@ -9,7 +9,7 @@ typedef struct SettingsPanel {
     Rectangle panelBounds;
     Icon *closeButton;
     Icon *themeSelector;
-    //Icon *hardModeToggle;
+    Icon *hardModeToggle;
     float roundness;
 } SettingsPanel;
 

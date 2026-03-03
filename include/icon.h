@@ -7,6 +7,7 @@
 #include "raylib.h"
 #include "settingsIcon.h"
 #include "themeIcon.h"
+#include "hardModeIcon.h"
 #include <stdlib.h>
 
 // Forward declaration for self reference in draw method
@@ -31,6 +32,7 @@ typedef struct Icon {
         LetterIcon *letterIcon;
         ClosePanelIcon *closePanel;
         ThemeIcon *themeIcon;
+        HardModeIcon *hardModeIcon;
     } data;
 } Icon;
 

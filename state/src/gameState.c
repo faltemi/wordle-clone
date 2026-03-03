@@ -4,6 +4,7 @@
 GameState *MakeDefaultGameState(){
     GameState *g = malloc(sizeof(GameState));
     g->theme = MakeTheme();
+    g->isHardMode = false;
     g->screenHeight = 600;
     g->screenWidth = 800;
     g->windowTitle = "Wordle Clone";

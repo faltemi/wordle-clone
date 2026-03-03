@@ -31,6 +31,7 @@ set(SOURCES
     components/src/notificationManager.c
     components/src/settingsPanel.c
     icons/src/closePanelIcon.c
+    icons/src/hardModeIcon.c
     icons/src/letterIcon.c
     icons/src/settingsIcon.c
     icons/src/themeIcon.c

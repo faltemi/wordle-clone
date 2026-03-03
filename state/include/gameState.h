@@ -5,12 +5,14 @@
 #include "wordList.h"
 #include "theme.h"
 #include <string.h>
+#include <stdbool.h>
 
 typedef enum GameScreen { LOGO, TITLE, GAMEPLAY, GUESSING, LOSE, WIN, SETTINGS } GameScreen;
 
 // Extendable to read from save and include winstreak, etc.
 typedef struct GameState {
     Theme *theme;
+    bool isHardMode;
     // Game window
     int screenHeight;
     int screenWidth;
