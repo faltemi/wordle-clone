@@ -1,5 +1,6 @@
 #include "inputProcessing.h"
 #include "gameGrid.h"
+#include <stdio.h>
 
 static void GetWord(GameGrid *gameGrid, int guessRowIdx, char *outputBuffer){
     for(int i = 0; i < NUM_LETTERS; ++i){
@@ -8,12 +9,29 @@ static void GetWord(GameGrid *gameGrid, int guessRowIdx, char *outputBuffer){
     outputBuffer[NUM_LETTERS] = '\0';
 }
 
-void GuessWord(GameGrid *gameGrid, NotificationManager* notifMgr, GameState *g){
+static void IsValidHardModeGuess(GameGrid *gameGrid, NotificationManager *notiMgr, GameState *g){
+    // ToDo: Hints in gamestate: then parse and process: then assign to notif: then set notif
+    // char greenLocked[5] with null term for nothing
+    // char mustInclude[5] for yellow chars, up to 5 possible (do I need count?)
+    // snprintf into notifMgr->msg
+    // Green
+    snprintf(notiMgr->message, sizeof(notiMgr->message), "%s letter must be %c", "3rd", 'R');
+    // Yellow
+    snprintf(notiMgr->message, sizeof(notiMgr->message), "Guess must contain %c", 'S');
+}
+
+void GuessWord(GameGrid *gameGrid, NotificationManager *notifMgr, GameState *g){
     if(g->guessLetterIdx == NUM_LETTERS){
         char guessedWord[NUM_LETTERS+1];
         GetWord(gameGrid, g->guessRowIdx, guessedWord);
         
         if(IsValidWord(g->wordList, guessedWord)){
+            if(g->isHardMode){
+                // ToDo: Should return bool and get some info about what is violated
+                IsValidHardModeGuess(gameGrid, notifMgr, g);
+                // Set notification: either green/yellow violation, how to do dynamic string?
+                // Check for 
+            }
             // Change state to 'guessing', freeze input and guess each letter until done
             g->gameScreen = GUESSING;
         }

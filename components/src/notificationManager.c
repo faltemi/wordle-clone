@@ -6,6 +6,7 @@
 void SetNotification(NotificationManager *notifMgr, Notification n){
     notifMgr->n = n;
     switch(n){
+        case NOTIFY_HARDMODE_VIOLATION:
         case NOTIFY_INVALID_WORD:
         case NOTIFY_NOT_ENOUGH_LETTERS:
         {
@@ -41,7 +42,8 @@ int DrawNotifications(NotificationManager *notifMgr, GameState *g) {
     const char *text = "";
     switch (notifMgr->n) {
         case NOTIFY_NOT_ENOUGH_LETTERS: text = "Not Enough Letters"; break;
-        case NOTIFY_INVALID_WORD:     text = "Invalid Word"; break;
+        case NOTIFY_INVALID_WORD:       text = "Invalid Word"; break;
+        case NOTIFY_HARDMODE_VIOLATION: text = notifMgr->message; break;
         default: return 0;
     }
 
