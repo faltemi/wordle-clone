@@ -1,0 +1,36 @@
+# --- CMake build trees & cache ---
+build*/
+out*/
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+cmake_install.cmake
+install_manifest.txt
+_compile_commands.json
+CMakeUserPresets.json
+
+# VS Code workspace (keep only what you want)
+.vscode/
+
+# Compiled objects & binaries
+*.o
+*.obj
+*.lo
+*.la
+*.Plo
+*.a
+*.lib
+*.dll
+*.so
+*.dylib
+*.exp
+*.pdb
+*.idb
+*.mod
+*.exe
+
+# Logs & temps
+*.log
+*.tmp
+*.temp
