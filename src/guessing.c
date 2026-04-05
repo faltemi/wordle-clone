@@ -27,6 +27,28 @@ void ProcessGuess(GameGrid *gameGrid, GameState *g, Keyboard *k){
             g->gameScreen = WIN;
             return;
         }
+        // Record hard mode hints from the completed row
+        if(g->isHardMode){
+            for(int i = 0; i < NUM_LETTERS; ++i){
+                LetterIcon *li = gameGrid->letterIcons[g->guessRowIdx][i]->data.letterIcon;
+                if(li->state == CORRECT){
+                    g->greenLocked[i] = li->letter[0];
+                }
+                else if(li->state == WRONG_POS){
+                    // Add to yellowRequired if not already tracked
+                    bool found = false;
+                    for(int j = 0; j < g->yellowCount; ++j){
+                        if(g->yellowRequired[j] == li->letter[0]){
+                            found = true;
+                            break;
+                        }
+                    }
+                    if(!found && g->yellowCount < NUM_LETTERS){
+                        g->yellowRequired[g->yellowCount++] = li->letter[0];
+                    }
+                }
+            }
+        }
         g->guessingWordIdx = 0;
         g->numLettersCorrect = 0;
         g->guessRowIdx++;
