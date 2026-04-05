@@ -43,6 +43,15 @@ static void MakeThemeToggleIcon(Icon *i, Rectangle bounds, GameState *g){
     i->draw = &DrawThemeIcon;
 }
 
+static void MakeHardMode(Icon *i, Rectangle bounds, GameState *g){
+    (void)g;
+    i->type = ICON_HARD_MODE;
+    i->bounds = bounds;
+    i->data.hardModeIcon = MakeHardModeIcon(bounds);
+    i->onClick = &ClickHardModeIcon;
+    i->draw = &DrawHardModeIcon;
+}
+
 // Icon factory
 Icon *MakeIcon(IconType type, Rectangle bounds, GameState *g){
     Icon *i = malloc(sizeof(Icon));
@@ -61,6 +70,9 @@ Icon *MakeIcon(IconType type, Rectangle bounds, GameState *g){
             break;
         case ICON_THEME:
             MakeThemeToggleIcon(i, bounds, g);
+            break;
+        case ICON_HARD_MODE:
+            MakeHardMode(i, bounds, g);
             break;
         default: break;
     }
@@ -88,6 +100,10 @@ void FreeIcon(Icon *i){
         case ICON_THEME:
         {
             free(i->data.themeIcon);
+        } break;
+        case ICON_HARD_MODE:
+        {
+            free(i->data.hardModeIcon);
         } break;
         default: break;
     }

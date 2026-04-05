@@ -22,11 +22,18 @@ SettingsPanel *MakeSettingsPanel(GameState *g){
 
     // Theme selector in center of panel
     Rectangle themeBounds = {
-        p->panelBounds.x + (p->panelBounds.width - 120) / 2,  // Center horizontally (120px wide)
+        p->panelBounds.x + (p->panelBounds.width - 140) / 2,  // Center horizontally (120px wide)
         p->panelBounds.y + (p->panelBounds.height - 50) / 2,  // Center vertically (50px tall)
-        120, 50
+        140, 50
     };
     p->themeSelector = MakeIcon(ICON_THEME, themeBounds, g);
+    // Hardmode toggle below theme selector
+    Rectangle hardModeToggleBounds = {
+        p->panelBounds.x + (p->panelBounds.width - 140) / 2,  // Center horizontally (120px wide)
+        p->panelBounds.y + 75 + (p->panelBounds.height - 50) / 2,  // Center vertically (50px tall)
+        140, 50
+    };
+    p->hardModeToggle = MakeIcon(ICON_HARD_MODE, hardModeToggleBounds, g);
 
     p->roundness = 0.1f;
 
@@ -36,6 +43,7 @@ SettingsPanel *MakeSettingsPanel(GameState *g){
 void FreeSettingsPanel(SettingsPanel *p){
     FreeIcon(p->closeButton);
     FreeIcon(p->themeSelector);
+    FreeIcon(p->hardModeToggle);
     free(p);
 }
 
@@ -55,8 +63,7 @@ void DrawSettingsScreen(SettingsPanel *panel, GameState *g){
     // Theme selector in center
     panel->themeSelector->draw(panel->themeSelector, g);
 
-    // ToDo: Setting rows with toggle switches
-
+    panel->hardModeToggle->draw(panel->hardModeToggle, g);
 }
 
 void ProcessSettingsInput(SettingsPanel *panel, GameState *state){
@@ -74,5 +81,10 @@ void ProcessSettingsInput(SettingsPanel *panel, GameState *state){
     // Handle theme selector click
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), panel->themeSelector->bounds)) {
         panel->themeSelector->onClick(state);
+    }
+
+    // Handle hardmode toggle click
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && CheckCollisionPointRec(GetMousePosition(), panel->hardModeToggle->bounds)) {
+        panel->hardModeToggle->onClick(state);
     }
 }

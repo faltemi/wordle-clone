@@ -4,6 +4,10 @@
 GameState *MakeDefaultGameState(){
     GameState *g = malloc(sizeof(GameState));
     g->theme = MakeTheme();
+    g->isHardMode = false;
+    memset(g->greenLocked, '\0', NUM_LETTERS);
+    memset(g->yellowRequired, '\0', NUM_LETTERS);
+    g->yellowCount = 0;
     g->screenHeight = 600;
     g->screenWidth = 800;
     g->windowTitle = "Wordle Clone";
@@ -53,6 +57,9 @@ void RestartGame(GameState *g){
     g->guessLetterIdx = 0;
     g->guessingWordIdx = 0;
     g->numLettersCorrect = 0;
+    memset(g->greenLocked, '\0', NUM_LETTERS);
+    memset(g->yellowRequired, '\0', NUM_LETTERS);
+    g->yellowCount = 0;
     g->gameScreen = GAMEPLAY;
     g->targetWord = GetRandomWord(g->wordList);
 }

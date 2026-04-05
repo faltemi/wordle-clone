@@ -4,13 +4,19 @@
 #include "raylib.h"
 #include "wordList.h"
 #include "theme.h"
+#include "globals.h"
 #include <string.h>
+#include <stdbool.h>
 
 typedef enum GameScreen { LOGO, TITLE, GAMEPLAY, GUESSING, LOSE, WIN, SETTINGS } GameScreen;
 
 // Extendable to read from save and include winstreak, etc.
 typedef struct GameState {
     Theme *theme;
+    bool isHardMode;
+    char greenLocked[NUM_LETTERS];    // '\0' = no lock, otherwise required letter at position
+    char yellowRequired[NUM_LETTERS]; // Yellow letters that must appear in subsequent guesses
+    int yellowCount;
     // Game window
     int screenHeight;
     int screenWidth;
