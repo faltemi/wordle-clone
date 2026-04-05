@@ -1,26 +1,42 @@
 This is my attempt at a Wordle clone written in C with raylib.
 
-**Linux Build**
-# 1) Install a compiler + cmake + ninja
-sudo apt update
-sudo apt install build-essential
+## Linux Build
 
-# 2) Install libraries for opening windows/playing audio that Raylib needs
+```bash
+# 1) Install a compiler + cmake
+sudo apt update
+sudo apt install build-essential cmake
+
+# 2) Install libraries that Raylib needs
 sudo apt install git libasound2-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libxcursor-dev libxinerama-dev
 
-
 # 3) Configure & build
-mkdir build
-cd build
+mkdir build && cd build
 cmake ..
 cmake --build .
 
-# 4) Run wordle
-Run the binary generated in your build directory.
+# 4) Run
 ./wordle
+```
 
-**Windows Build**
-ToDo.
+## Windows Build
+
+```powershell
+# 1) Install prerequisites
+#    - Visual Studio 2019+ with "Desktop development with C++" workload
+#      (includes MSVC compiler and CMake)
+#    OR
+#    - Install CMake (https://cmake.org/download/) and MinGW-w64
+
+# 2) Configure & build
+mkdir build
+cd build
+cmake ..
+cmake --build . --config Release
+
+# 3) Run
+.\Release\wordle.exe
+```
 
 **Third Party Assets**
 
