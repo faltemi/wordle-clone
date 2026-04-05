@@ -22,7 +22,7 @@ static inline void ProcessNotifications(NotificationManager *nMgr, GameGrid *gri
 int main(){
     // Initialization
     // ----------------------------------------------------------------
-    SetRandomSeed(1234); // ToDo: make this truly random
+    // SetRandomSeed(1234); // ToDo: make this truly random
     GameState *gameState = MakeDefaultGameState();
 
     InitWindow(gameState->screenWidth, gameState->screenHeight, gameState->windowTitle);
